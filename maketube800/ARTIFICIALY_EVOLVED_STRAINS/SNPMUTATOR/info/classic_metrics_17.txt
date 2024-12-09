@@ -1,0 +1,6 @@
+2 replicates
+1800 positions having any variants
+1800 positions having monomorphic variants
+0 positions having polymorphic variants
+1800 variant positions found in exactly one replicate
+0 variant positions found in multiple replicates
