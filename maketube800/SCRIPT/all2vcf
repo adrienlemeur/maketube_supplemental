@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+from os.path import abspath
+
+# change this if you want a different one
+interpreter="python3"
+
+if len(sys.argv) == 1:
+    sys.argv.append("-h")
+
+if sys.argv[1] in ["-h","--help","getopt","usage","help","-help"]:
+
+    sys.stderr.write("""
+
+    --------------------------------------------------------------------------------
+    all2vcf
+    v 0.7.8
+    Matteo Schiavinato
+    2021
+    --------------------------------------------------------------------------------
+    Toolkit to convert and process different variant calling formats
+    --------------------------------------------------------------------------------
+
+    [manipulation]
+    filter_vcf      Filter variants in a VCF file using common metrics
+    frequency       Annotate allele frequency (AF) in the INFO and FORMAT field
+
+    [conversion]
+    isec            Convert the sites.txt output file of bcftools isec to VCF
+    mummer          Convert the result of show-snps -T to a psuedo-VCF file
+
+    [statistics]
+    density         Count variants and variants per kbp from a VCF file
+    stats           Count occurrences of variants inside the provided VCF files
+
+    """)
+    sys.exit(0)
+
+else:
+    args = " ".join(sys.argv[1:])
+    PROGRAMDIR = os.path.dirname(os.path.realpath(__file__))
+    os.system(f"{interpreter} {PROGRAMDIR}/src/{args}")
