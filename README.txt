@@ -9,9 +9,7 @@ This repository contains :
 If you have any question / observation, feel free to send me an email at :
 > alemeur@biophylo.com
 
-To visualise the folder aborescence :
-	README.txt => "RAW"
-
+```
 ├── maketube800												# First batch of strains with ~ 800 SNP. Fig
 │   ├── ARTIFICIALY_EVOLVED_STRAINS									# Maketube & SNPmutator strains 
 │   │   ├── MAKETUBE
@@ -81,3 +79,4 @@ To visualise the folder aborescence :
 │       ├── TBPROFILER_MPILEUP_FILTERED
 │       └── TBPROFILER_MPILEUP_RAW_CALL
 └── README.txt												# You are here !
+```
