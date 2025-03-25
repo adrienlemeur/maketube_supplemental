@@ -20,25 +20,26 @@ dnadiff_data$relationship[dnadiff_data$relationship == FALSE] <- "interlineage"
 dnadiff_data$sample_source <- factor(dnadiff_data$sample_source, levels = c("natural", "snpmutator", "maketube"), ordered = T)
 dnadiff_data$lineage_source <- paste(dnadiff_data$sample_lineage, dnadiff_data$sample_source, sep = ", ")
 
-subset_dnadiff <- subset(dnadiff_data,
+sub1 <- subset(dnadiff_data, !(sample_source == "snpmutator" & sample_lineage == "L2"))
+
+subset_dnadiff <- subset(sub1,
                           (reference == "H37Rv" & sample_source == "natural") |
                           (reference_lineage == sample_lineage & sample_source == "natural") |
-                          (sample_source != "natural" & reference_lineage == sample_lineage) |
-                          !(sample_source == "snpmutator" & sample_lineage == "L2")
+                          (sample_source != "natural" & reference_lineage == sample_lineage)
                         )
 
-svg("fig3_A_pairwise_nucleotide_distance.svg", width = 10, height = 10)
-ggplot(subset_dnadiff) +
+colnames(subset_dnadiff)
+fig3_A <- ggplot(data = subset_dnadiff) +
   geom_hline(yintercept = seq(0, 0.013, by = 0.001),
-              linetype = "dotted", color = "grey", ) +
+             linetype = "dotted", color = "grey", ) +
   geom_vline(
-              xintercept = seq(0, 0.013, by = 0.001),
-              linetype = "dotted", color = "grey", ) +
-  geom_point(aes(1-ref_aligned/ref_length, 1-sample_aligned/sample_length, fill = sample_lineage, pch = sample_source), size = 2) +
+    xintercept = seq(0, 0.013, by = 0.001),
+    linetype = "dotted", color = "grey", ) +
+  geom_point(aes(x = as.numeric(1-ref_aligned/ref_length), y = as.numeric(1-sample_aligned/sample_length), fill = sample_lineage, pch = sample_source), size = 2) +
   geom_mark_hull(aes(x = 1-ref_aligned/ref_length, y = 1-sample_aligned/sample_length, col = sample_source, label = sample_source),
                  label.hjust = 0, fill = "grey",
                  con.type = "elbow", concavity = 10, expand = 0.03, radius = 0.03,
-                 label.fontface = "bold", label.colour = "inherit", label.fontsize = 13,
+                 label.fontface = "bold", label.fontsize = 13,
                  con.colour = "inherit", label.fill = NA
   ) +
   scale_shape_manual(values = c(natural = 21, snpmutator = 24, maketube = 25), name = "Genome category :") +
@@ -50,6 +51,9 @@ ggplot(subset_dnadiff) +
   ylab("Distance to the reference") +
   xlab("Distance to the sample") +
   theme_light()
+
+svg("fig3_A_pairwise_nucleotide_distance.svg", width = 10, height = 10)
+fig3_A
 dev.off()
 
 svg("fig3_B_pairwise_nucleotide_distribution.svg")
@@ -60,7 +64,6 @@ ggplot(subset(dnadiff_data, relationship == "intralineage")) +
   geom_boxplot(aes(sample_source, ((1-ref_aligned/ref_length) + (1-sample_aligned/sample_length))/2, fill = sample_source)) +
   scale_fill_manual(values = c("maketube" = "firebrick2", "snpmutator" = "orange", "natural" = "darkgreen"), guide = "none") +
   xlab("") + ylab("Average pairwise \ndistance to H37Rv")
-
 dev.off()
 
 ggplot(test) +
