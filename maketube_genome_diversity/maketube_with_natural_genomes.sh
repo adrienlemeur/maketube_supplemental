@@ -4,6 +4,7 @@
 cat REAL_STRAINS/*.fasta > BLAST_DB/genome_concatenation.fasta
 makeblastdb -in BLAST_DB/genome_concatenation.fasta -title all_tuberculosis_genomes -dbtype nucl -out BLAST_DB/genome_concatenation
 blastn -query BLAST_DB/IS6110.fasta -db BLAST_DB/genome_concatenation -outfmt "6 qseqid sseqid pident sstart send" > BLAST_DB/IS6110_query_results.tsv
+ONE_TIME
 
 while read reference_line
 do
@@ -33,7 +34,7 @@ do
 		--fasta-dir "snpmutator_run/${reference}"
 
 done < <(grep "reference_genome" natural_strains_info.txt | grep -v "#")
-ONE_TIME
+
 
 
 mkdir -p DELTAS BAM
