@@ -20,11 +20,11 @@ dnadiff_data$relationship[dnadiff_data$relationship == FALSE] <- "interlineage"
 dnadiff_data$sample_source <- factor(dnadiff_data$sample_source, levels = c("natural", "snpmutator", "maketube"), ordered = T)
 dnadiff_data$lineage_source <- paste(dnadiff_data$sample_lineage, dnadiff_data$sample_source, sep = ", ")
 
-subset1 <- subset(dnadiff_data, !(sample_source == "snpmutator" & sample_lineage == "L2"))
-subset_dnadiff <- subset(subset1,
+subset_dnadiff <- subset(dnadiff_data,
                           (reference == "H37Rv" & sample_source == "natural") |
                           (reference_lineage == sample_lineage & sample_source == "natural") |
-                          (sample_source != "natural" & reference_lineage == sample_lineage)
+                          (sample_source != "natural" & reference_lineage == sample_lineage) |
+                          !(sample_source == "snpmutator" & sample_lineage == "L2")
                         )
 
 svg("fig3_A_pairwise_nucleotide_distance.svg", width = 10, height = 10)
@@ -60,6 +60,7 @@ ggplot(subset(dnadiff_data, relationship == "intralineage")) +
   geom_boxplot(aes(sample_source, ((1-ref_aligned/ref_length) + (1-sample_aligned/sample_length))/2, fill = sample_source)) +
   scale_fill_manual(values = c("maketube" = "firebrick2", "snpmutator" = "orange", "natural" = "darkgreen"), guide = "none") +
   xlab("") + ylab("Average pairwise \ndistance to H37Rv")
+
 dev.off()
 
 ggplot(test) +
