@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#can be skipped altogether, all necessary files are precomputed
+#you may skip this altogether, all necessary files are precomputed
 if [ "$1" == "-r" ]; then
 	echo "rerun the complete analysis"
 
@@ -18,7 +18,7 @@ if [ "$1" == "-r" ]; then
 		reference_transposon=$(echo $reference_line | cut -f4 -d ' ')
 		reference_lineage=$(echo $reference_line | cut -f5 -d ' ')
 		
-		#maketube genome are manually copy pasted
+		#maketube genome are THEN manually copy pasted into artificial strains
 		Rscript maketube.R \
 			--reference $reference_file --transposon $reference_transposon --nonhomoseq "REF/nonH37Rv_pool_sequence_cp.fasta" \
 			--output "maketube_run/${reference}_run" \

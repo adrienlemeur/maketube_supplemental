@@ -1,10 +1,11 @@
 This is the repository for the maketube paper complete data.
+
 It includes : 
 	- the sequences used (with the exception of larger files)
 	- the script used for the analysis
 	- the figures & the script used to generate the figures.
 
-Exhaustive description :
+Extensive description :
 
 ├── genome_diversity_of_maketube_genomes			# analysis of sequence diversity between natural and artificial genome
 │   ├── REF
@@ -17,4 +18,6 @@ Exhaustive description :
 │   │   └── H37Rv
 │   └── maketube_with_natural_genomes.sh
 └────── natural_strains_info.txt				#ID, lineage and additional information about natural strains
+
+
 
