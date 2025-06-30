@@ -1,0 +1,77 @@
+.
+├── genome_diversity_of_maketube_genomes
+│   ├── artificial_strains
+│   ├── DELTAS
+│   ├── maketube_run
+│   │   ├── 18b_run
+│   │   │   ├── SV1
+│   │   │   │   └── pop1
+│   │   │   │       ├── FASTA
+│   │   │   │       └── FASTQ
+│   │   │   ├── SV2
+│   │   │   │   └── pop1
+│   │   │   │       ├── FASTA
+│   │   │   │       └── FASTQ
+│   │   │   ├── SV3
+│   │   │   │   └── pop1
+│   │   │   │       ├── FASTA
+│   │   │   │       └── FASTQ
+│   │   │   ├── SV4
+│   │   │   │   └── pop1
+│   │   │   │       ├── FASTA
+│   │   │   │       └── FASTQ
+│   │   │   └── SV5
+│   │   │       └── pop1
+│   │   │           ├── FASTA
+│   │   │           └── FASTQ
+│   │   ├── AF2122_run
+│   │   │   ├── SV1
+│   │   │   │   └── pop1
+│   │   │   │       ├── FASTA
+│   │   │   │       └── FASTQ
+│   │   │   ├── SV2
+│   │   │   │   └── pop1
+│   │   │   │       ├── FASTA
+│   │   │   │       └── FASTQ
+│   │   │   ├── SV3
+│   │   │   │   └── pop1
+│   │   │   │       ├── FASTA
+│   │   │   │       └── FASTQ
+│   │   │   ├── SV4
+│   │   │   │   └── pop1
+│   │   │   │       ├── FASTA
+│   │   │   │       └── FASTQ
+│   │   │   └── SV5
+│   │   │       └── pop1
+│   │   │           ├── FASTA
+│   │   │           └── FASTQ
+│   │   └── H37Rv_run
+│   │       ├── SV1
+│   │       │   └── pop1
+│   │       │       ├── FASTA
+│   │       │       └── FASTQ
+│   │       ├── SV2
+│   │       │   └── pop1
+│   │       │       ├── FASTA
+│   │       │       └── FASTQ
+│   │       ├── SV3
+│   │       │   └── pop1
+│   │       │       ├── FASTA
+│   │       │       └── FASTQ
+│   │       ├── SV4
+│   │       │   └── pop1
+│   │       │       ├── FASTA
+│   │       │       └── FASTQ
+│   │       └── SV5
+│   │           └── pop1
+│   │               ├── FASTA
+│   │               └── FASTQ
+│   ├── REAL_STRAINS
+│   ├── REF
+│   └── snpmutator_run
+│       ├── 18b
+│       ├── AF2122
+│       └── H37Rv
+└── nucmer_vs_minimap2
+
+75 directories
