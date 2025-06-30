@@ -5,7 +5,7 @@
 #IMPORTANT : ALL2VCF to convert .snps to .vcf
 #https://github.com/MatteoSchiavinato/all2vcf
 
-all_strains=$(find ./ARTIFICIAL_STRAINS -type f \( -iname \*.fasta -o -iname \*.fa \))
+all_strains=$(find ./ -type f \( -iname \*.fasta -o -iname \*.fa \))
 
 REF="REF/H37Rv.fasta"
 
