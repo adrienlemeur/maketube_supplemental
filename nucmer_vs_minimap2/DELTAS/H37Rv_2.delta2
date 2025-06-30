@@ -1,0 +1,5 @@
+/media/alemeur/HARVEST/benchmarking_tuberculosis/benchmarking_maketube/REF/H37Rv.fasta /media/alemeur/HARVEST/benchmarking_tuberculosis/benchmarking_maketube/REF/H37Rv_2.fasta
+NUCMER
+>H37Rv H37Rv 4411532 4411532
+1 4411532 1 4411532 0 0 0
+0
