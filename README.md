@@ -10,29 +10,27 @@ This is the repository for the maketube article (link).
 
 ### <a name="genome_diversity_tag"></a>Diversity of artificial and natural genomes
 
-Dependencies :
+## Dependencies :
 
-Tools :
-
+# Tools : 
 	- snpmutator
 	- maketube (included)
 
-R libs :
+# R libs :
+	- seqinr, jackalope, optparse, Biostrings, dplyr, ape (maketube)
+	- ggplot2, scales, ggrepel, ggforce
 
-	- for maketube : seqinr, jackalope, optparse, Biostrings, dplyr, ape
-	- for visualisation : ggplot2, scales, ggrepel, ggforce
-
-Descriptions :
+## Descriptions :
 
 <p align="justify">
-Maketube and snpmutator are first launched to generate strains from the 3 reference genomes (natural_strains_info.txt).
-A subsample of 10 strains for each reference, was manually copied into the "artificial_strains" folder.
-These genomes, and natural genomes are aligned onto the three reference genomes using nucmer, and the resulting delta files are filtered.A report is generated with dnadiff.
+Maketube and snpmutator are first launched to generate strains from the 3 reference genomes (`natural_strains_info.txt`).
+A subsample of 10 strains for each reference, was manually copied into the `artificial_strains` folder.
+These genomes, and natural genomes are aligned onto the three reference genomes using nucmer, and the resulting delta files are filtered. A report is generated with dnadiff.
 The number of base of the considered genome aligned on the reference, as well as the number of base of the reference aligned on the considered genome, are grepped and conserved in distance_to_reference.tsv.
-The visualisation is made from distance_to_reference.tsv with genome_pairwise_comparison.R
+The visualisation is made from `distance_to_reference.tsv` with `genome_pairwise_comparison.R`
 </p>
 
-File :
+## File :
 ```
 ├── genome_diversity_of_maketube_genomes			# source folder
 │   ├── REF
