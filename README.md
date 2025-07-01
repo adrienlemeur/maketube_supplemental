@@ -5,10 +5,10 @@ This is the repository for the maketube article (link).
 ### Table of contents
 
 <!--ts-->
--  [Figure 3 : ](#genome_diversity_tag)
+-  [Figure 3 : Diversity of artificial and natural genomes](#genome_diversity_tag)
 
 
-# <a name="genome_diversity_tag"></a> I. Diversity of artificial and natural genomes
+# <a name="genome_diversity_tag"></a> Diversity of artificial and natural genomes
 
 ## Dependencies :
 
@@ -48,3 +48,41 @@ The visualisation is made from `distance_to_reference.tsv` with `genome_pairwise
 └────── natural_strains_info.txt				#ID, lineage and additional information about natural strains
 ```
 
+# <a name="nucmer_minimap2"></a> Evaluating the performance of nucmer & minimap2
+## Dependencies :
+
+### Tools : 
+	- all2vcf
+	- nucmer
+	- minimap2
+	- bcftools
+
+### R libs :
+	- ggplot2
+	- gridExtra
+	- scales
+	- patchwork
+	- gghalves
+	- ggpp
+	- ggpubr
+
+## Descriptions :
+
+<p align="justify">
+
+</p>
+
+```
+nucmer_vs_minimap2/
+├── DELTAS								# nucmer deltas & temporary files
+├── HEUPINK_STRAINS						# snpmutator genomes
+├── maketube_strains						# maketube genomes
+├── PAF								# PAF alignments
+├── PAF_VCF								# PAFtools.js produced VCF
+├── PSEUDOVCF							# nucmer derived VCF
+├── 6_minimap_nucmer_variants.sh				# generate VCF from nucmer & minimap2 files
+├── 7_COMPARING_3_VARIANT_CALLERS.sh			# compute the performance metrics from the VCF
+├── a_database_to_rule_them_all.tsv				# info about the 
+├── nucmer_minimap2_results.tsv				# results from script 7
+└── NUCMER_PAF.R							# visualisation
+```
