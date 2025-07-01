@@ -12,11 +12,13 @@ This is the repository for the maketube article (link).
 
 Dependencies :
 
-Tools : 
+Tools :
+
 	- snpmutator
 	- maketube (included)
 
-R libs : 
+R libs :
+
 	- for maketube : seqinr, jackalope, optparse, Biostrings, dplyr, ape
 	- for visualisation : ggplot2, scales, ggrepel, ggforce
 
