@@ -1,7 +1,5 @@
 <h1 align="center"> Maketube supplemental </h1>
 
-### Table of contents
-
 This is the repository for the maketube article (link).
 
 ### Table of contents
