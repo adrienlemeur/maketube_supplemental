@@ -8,15 +8,15 @@ This is the repository for the maketube article (link).
 -  [Figure 3 : ](#genome_diversity_tag)
 
 
-# <a name="genome_diversity_tag"></a>Diversity of artificial and natural genomes
+# <a name="genome_diversity_tag"></a> I. Diversity of artificial and natural genomes
 
 ## Dependencies :
 
-### Tools : 
+# Tools : 
 	- snpmutator
 	- maketube (included)
 
-### R libs :
+# R libs :
 	- seqinr, jackalope, optparse, Biostrings, dplyr, ape (maketube)
 	- ggplot2, scales, ggrepel, ggforce
 
