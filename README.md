@@ -2,7 +2,7 @@
 
 This is the repository for the maketube article (link).
 
-### Table of contents
+#### Table of contents
 
 <!--ts-->
 -  [Figure 3 : Diversity of artificial and natural genomes](#genome_diversity_tag)
