@@ -66,20 +66,21 @@ Variants were called
 
 ```
 └─ genotube_tbprofiler_mtbseq
-   ├── 7_COMPARING_3_VARIANT_CALLERS.sh
-   ├── a_database_to_rule_them_all.tsv
-   ├── all_strains_info.tsv
-   ├── fig5_precision_recall_3VC_only_violin.svg
-   ├── fig5_precision_recall_3VC_only_violin_wo_dupli.svg
-   ├── FREEBAYES_RAW_CALLS
-   ├── GATK_MTBseq
-   ├── GATK_RAW_CALLS
-   ├── genotube
-   ├── HEUPINK_STRAINS
-   ├── maketube_strains
-   ├── TBprofiler
-   ├── three_variant_caller_results.tsv
-   └── THREE_VC.R
+   ├── 0_alignement_30X_run.sh				 		# generate the FASTQ from the fasta using art
+   ├── 1_COMPARING_3_VARIANT_CALLERS.sh					# compare the variants called by the pipelines to the reference VCF
+   ├── a_database_to_rule_them_all.tsv					# information about strains
+   ├── all_strains_info.tsv						# reduced strain information
+   ├── fig5_precision_recall_3VC_only_violin.svg			# pipeline performances with duplication region
+   ├── fig5_precision_recall_3VC_only_violin_wo_dupli.svg		# pipeline performances without duplication region
+   ├── FREEBAYES_RAW_CALLS						# freebayes raw call without filtering
+   ├── GATK_MTBseq							# MTBseq VCF
+   ├── GATK_RAW_CALLS							# GATK raw call without additional filtering
+   ├── genotube								# genotube VCF
+   ├── TBprofiler							# TBprofiler VCF
+   ├── HEUPINK_STRAINS							# snpmutator fasta
+   ├── maketube_strains							# maketube fasta
+   ├── three_variant_caller_results.tsv					# output from 1_COMPARING_3_VARIANT_CALLERS.sh
+   └── THREE_VC.R							# visualisation
 ```
 <p align="justify">
 Artificial genomes were 
