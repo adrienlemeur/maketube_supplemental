@@ -69,12 +69,6 @@ Artificial genomes were
 ### Dependencies :
 
 #### Tools : 
-	* all2vcf, nucmer, minimap2, bcftools
-
-#### R libs :
-	* ggplot2, gridExtra, scales, patchwork, gghalves, ggpp, ggpubr
-=======
-### Tools : 
 	- all2vcf
 	- nucmer
 	- minimap2
@@ -89,7 +83,7 @@ Artificial genomes were
 	- ggpp
 	- ggpubr
 
-### Descriptions :
+#### Descriptions :
 
 <p align="justify">
 
