@@ -6,6 +6,8 @@ This is the repository for the maketube article (link).
 
 <!--ts-->
 -  [Figure 3 : Diversity of artificial and natural genomes](#genome_diversity_tag)
+-  [Figure 5 : Comparing three variant caller](#three_vc)
+-  [Figure 4 : Nucmer and minimap2](#nucmer_minimap2)
 
 
 ## <a name="genome_diversity_tag"></a> Diversity of artificial and natural genomes
@@ -48,7 +50,7 @@ The visualisation is made from `distance_to_reference.tsv` with `genome_pairwise
 ├────────── maketube.R
 └────── natural_strains_info.txt			#ID, lineage and additional information about natural strains
 ```
-## <a name="nucmer_minimap2"></a> Evaluation of TBprofiler, MTBseq & genotube
+## <a name="three_vc"></a> Evaluation of TBprofiler, MTBseq & genotube
 ### Dependencies :
 
 #### Tools : 
