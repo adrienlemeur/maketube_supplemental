@@ -33,20 +33,20 @@ The visualisation is made from `distance_to_reference.tsv` with `genome_pairwise
 
 ### File :
 ```
-├── genome_diversity_of_maketube_genomes			# source folder
+├── genome_diversity_of_maketube_genomes		# source folder
 │   ├── REF
-│   ├── DELTAS							# nucmer intermediary files .delta, .snps, etc.
-│   ├── artificial_strains					# snpmutator and maketube genomes
-│   ├── REAL_STRAINS						# natural strains sequences (& IS6110 locations, unused)
-│   ├── maketube_run						# maketube files : sequence, evolution partitions, annotations files. 
+│   ├── DELTAS						# nucmer intermediary files .delta, .snps, etc.
+│   ├── artificial_strains				# snpmutator and maketube genomes
+│   ├── REAL_STRAINS					# natural strains sequences (& IS6110 locations, unused)
+│   ├── maketube_run					# maketube files : sequence, evolution partitions, annotations files. 
 |   │   ├── AF2122
 │   │   ├── 18b
 │   │   └── H37Rv
 │   ├────── distance_to_reference.tsv			# bases aligned on the reference, reference aligned on the sample genome
 │   └────── maketube_with_natural_genomes.sh		# script with all the analysis
-├────────── genome_pairwise_comparison.R			# visualisation
+├────────── genome_pairwise_comparison.R		# visualisation
 ├────────── maketube.R
-└────── natural_strains_info.txt				#ID, lineage and additional information about natural strains
+└────── natural_strains_info.txt			#ID, lineage and additional information about natural strains
 ```
 ## <a name="nucmer_minimap2"></a> Evaluation of TBprofiler, MTBseq & genotube
 ### Dependencies :
@@ -93,15 +93,15 @@ Artificial genomes were
 
 ```
 nucmer_vs_minimap2/
-├── DELTAS								# nucmer deltas & temporary files
-├── HEUPINK_STRAINS								# snpmutator genomes
-├── maketube_strains								# maketube genomes
-├── PAF								# PAF alignments
-├── PAF_VCF								# PAFtools.js produced VCF
-├── PSEUDOVCF								# nucmer derived VCF
-├── 6_minimap_nucmer_variants.sh								# generate VCF from nucmer & minimap2 files
-├── 7_COMPARING_3_VARIANT_CALLERS.sh								# compute the performance metrics from the VCF
-├── a_database_to_rule_them_all.tsv								# info about the 
-├── nucmer_minimap2_results.tsv								# results from script 7
-└── NUCMER_PAF.R								# visualisation
+├── DELTAS						# nucmer deltas & temporary files
+├── HEUPINK_STRAINS					# snpmutator genomes
+├── maketube_strains					# maketube genomes
+├── PAF							# PAF alignments
+├── PAF_VCF						# PAFtools.js produced VCF
+├── PSEUDOVCF						# nucmer derived VCF
+├── 6_minimap_nucmer_variants.sh			# generate VCF from nucmer & minimap2 files
+├── 7_COMPARING_3_VARIANT_CALLERS.sh			# compute the performance metrics from the VCF
+├── a_database_to_rule_them_all.tsv			# info about the 
+├── nucmer_minimap2_results.tsv				# results from script 7
+└── NUCMER_PAF.R					# visualisation
 ```
