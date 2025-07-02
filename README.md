@@ -8,19 +8,19 @@ This is the repository for the maketube article (link).
 -  [Figure 3 : Diversity of artificial and natural genomes](#genome_diversity_tag)
 
 
-# <a name="genome_diversity_tag"></a> Diversity of artificial and natural genomes
+## <a name="genome_diversity_tag"></a> Diversity of artificial and natural genomes
 
-## Dependencies :
+### Dependencies :
 
-### Tools :
+#### Tools :
 	* snpmutator
 	* maketube (included)
 
-### R libs :
+#### R libs :
 	* seqinr, jackalope, optparse, Biostrings, dplyr, ape (maketube)
 	* ggplot2, scales, ggrepel, ggforce
 
-## Descriptions :
+### Descriptions :
 
 <p align="justify">
 Maketube and snpmutator are first launched to generate strains from the 3 reference genomes (`natural_strains_info.txt`).
@@ -30,7 +30,7 @@ The number of base of the considered genome aligned on the reference, as well as
 The visualisation is made from `distance_to_reference.tsv` with `genome_pairwise_comparison.R`
 </p>
 
-## File :
+### File :
 ```
 ├── genome_diversity_of_maketube_genomes			# source folder
 │   ├── REF
@@ -47,16 +47,16 @@ The visualisation is made from `distance_to_reference.tsv` with `genome_pairwise
 ├────────── maketube.R
 └────── natural_strains_info.txt				#ID, lineage and additional information about natural strains
 ```
-# <a name="nucmer_minimap2"></a> Evaluation of TBprofiler, MTBseq & genotube
-## Dependencies :
+## <a name="nucmer_minimap2"></a> Evaluation of TBprofiler, MTBseq & genotube
+### Dependencies :
 
-### Tools : 
+#### Tools : 
 	* all2vcf, nucmer, minimap2, bcftools
 
-### R libs :
+#### R libs :
 	* ggplot2, gridExtra, scales, patchwork, gghalves, ggpp, ggpubr
 
-## Descriptions :
+### Descriptions :
 
 <p align="justify">
 Artificial genomes were 
@@ -65,13 +65,13 @@ Artificial genomes were
 
 
 
-# <a name="nucmer_minimap2"></a> Evaluating the performance of nucmer & minimap2
-## Dependencies :
+## <a name="nucmer_minimap2"></a> Evaluating the performance of nucmer & minimap2
+### Dependencies :
 
-### Tools : 
+#### Tools : 
 	* all2vcf, nucmer, minimap2, bcftools
 
-### R libs :
+#### R libs :
 	* ggplot2, gridExtra, scales, patchwork, gghalves, ggpp, ggpubr
 =======
 ### Tools : 
@@ -80,7 +80,7 @@ Artificial genomes were
 	- minimap2
 	- bcftools
 
-### R libs :
+#### R libs :
 	- ggplot2
 	- gridExtra
 	- scales
@@ -89,7 +89,7 @@ Artificial genomes were
 	- ggpp
 	- ggpubr
 
-## Descriptions :
+### Descriptions :
 
 <p align="justify">
 
@@ -99,7 +99,6 @@ Artificial genomes were
 ```
 nucmer_vs_minimap2/
 ├── DELTAS								# nucmer deltas & temporary files
-<<<<<<< HEAD
 ├── HEUPINK_STRAINS								# snpmutator genomes
 ├── maketube_strains								# maketube genomes
 ├── PAF								# PAF alignments
