@@ -61,7 +61,26 @@ The visualisation is made from `distance_to_reference.tsv` with `genome_pairwise
 	* ggplot2, gridExtra, scales, patchwork, gghalves, ggpp, ggpubr
 
 ### Descriptions :
+Variants were called 
 
+
+```
+└─ genotube_tbprofiler_mtbseq
+   ├── 7_COMPARING_3_VARIANT_CALLERS.sh
+   ├── a_database_to_rule_them_all.tsv
+   ├── all_strains_info.tsv
+   ├── fig5_precision_recall_3VC_only_violin.svg
+   ├── fig5_precision_recall_3VC_only_violin_wo_dupli.svg
+   ├── FREEBAYES_RAW_CALLS
+   ├── GATK_MTBseq
+   ├── GATK_RAW_CALLS
+   ├── genotube
+   ├── HEUPINK_STRAINS
+   ├── maketube_strains
+   ├── TBprofiler
+   ├── three_variant_caller_results.tsv
+   └── THREE_VC.R
+```
 <p align="justify">
 Artificial genomes were 
 </p>
