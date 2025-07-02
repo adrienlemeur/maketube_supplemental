@@ -22,11 +22,9 @@
   names(my_PCH) <- levels(all_strains_info$source)
 }
 
-#maketube_results_wo_SV <- na.omit(read.table("nucmer_paf_perfect.tsv", sep = "\t", header = T))
-#colnames(maketube_results_wo_SV) <- c("sample", "pipeline", "FILTER", "TOTAL", "TOTAL2", "VARIANT_CLASS", "TP", "FP", "FN", "RECALL", "PRECISION", "F1")
-
 maketube_results <- na.omit(read.table("nucmer_minimap2_results.tsv", sep = "\t", header = T))
-colnames(maketube_results) <- c("pipeline", "sample", "FILTER", "N", "TOTAL", "TOTAL2", "VARIANT_CLASS", "TP", "FP", "FN", "RECALL", "PRECISION", "F1")
+subset(maketube_results)
+colnames(maketube_results) <- c("sample", "pipeline", "structural_variant", "N", "TOTAL", "TOTAL2", "VARIANT_CLASS", "TP", "FP", "FN", "RECALL", "PRECISION", "F1")
 
 maketube_results_wo_SV <- na.omit(read.table("nucmer_paf_perfect2.tsv", sep = "\t", header = T))
 colnames(maketube_results_wo_SV) <- c("sample", "pipeline", "FILTER", "TOTAL", "TOTAL2", "VARIANT_CLASS", "TP", "FP", "FN", "RECALL", "PRECISION", "F1")
