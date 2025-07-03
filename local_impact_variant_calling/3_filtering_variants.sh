@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-mkdir -p BAM FILTERED_VCF MPILEUP_FILTERED_VCF
+mkdir -p BAM FILTERED_VCF
 
 if [[ "$1" == "--filter" ]]
 then
