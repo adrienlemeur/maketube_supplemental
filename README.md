@@ -155,6 +155,7 @@ nucmer_vs_minimap2/
 	Variant are compared to the test VCF using vcf2metrics.py
 
 </p>
+
 ```
 local_impact_variant_calling/
 ├── 0_running_maketube.sh						#
@@ -172,3 +173,4 @@ local_impact_variant_calling/
 ├── VCF
 └── vcf2metrics.py
 ```
+
