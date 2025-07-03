@@ -12,28 +12,20 @@
 
 {
   results_by_region <- read.table("metrics_near_structural_variants.tsv", sep = "\t", header = F)
-  colnames(results_by_region) <- c("pipeline", "strain", "region", "region2", "variant_class", "TP", "FP", "FN", "RECALL", "PRECISION")
+  colnames(results_by_region) <- c("pipeline", "strain", "experiment", "region", "region2", "variant_class", "TP", "FP", "FN", "RECALL", "PRECISION")
 
   neutral_genotube <- subset(results_by_region, pipeline == "genotube" & region == 'ANTIBIOTIC_GENE' & variant_class == "snp")
-  neutral_tbprofiler <- subset(results_by_region, pipeline == "TBprofiler" & region == 'ANTIBIOTIC_GENE' & variant_class == "snp")
-  
+
   #reference_region_size <- 3842481
   reference_region_size <- 50000
 
-  PV <- (sum(neutral_genotube$TP) + sum(neutral_genotube$FN))/(reference_region_size*200)
+  PV <- (sum(as.numeric(neutral_genotube$TP)) + sum(as.numeric(neutral_genotube$FN)))/(reference_region_size*200)
   PIV <- 1 - PV
 
   PTP_genotube <- sum(neutral_genotube$TP) / (sum(neutral_genotube$TP) + sum(neutral_genotube$FN))
   PFN_genotube <- 1-PTP_genotube
   PFP_genotube <- sum(neutral_genotube$FP)/reference_region_size*200
-  #a <- (neutral_genotube$FN / neutral_genotube$TP) * PV
 
-  #neutral_tbprofiler$FN / (neutral_tbprofiler$TP + neutral_tbprofiler$FN)
-
-  PTP_tbprofiler <- sum(neutral_tbprofiler$TP) / (sum(neutral_tbprofiler$TP) + sum(neutral_tbprofiler$FN))
-  PFN_tbprofiler <- 1 - PTP_tbprofiler
-  PFP_tbprofiler <- sum(neutral_tbprofiler$FP)/(reference_region_size*200)
-  
   precision_calculator <- function(size, replicate, PTP, PFP, PFN, tag1, tag2){
     TP <- rbinom(replicate, size, PTP)
     FP <- rbinom(replicate, size, PFP)
@@ -70,16 +62,18 @@
 }
 
 {
-  results_by_region <- read.table("metrics_near_structural_variants.tsv", sep = "\t", header = F)[,c(1,3,5:10)]
-  results_by_region <- subset(results_by_region, V5 == "snp")[, -3]
-  colnames(results_by_region) <- c("pipeline", "region", "TP", "FP", "FN", "RECALL", "PRECISION")
+  results_by_region <- read.table("metrics_near_structural_variants.tsv", sep = "\t", header = F)[,c(1,3,5:9)]
+  results_by_region <- subset(results_by_region, V6 == "snp")[, -4]
 
-  results_by_region <- results_by_region #rbind(results_by_region, both_distributions)
+  colnames(results_by_region) <- c("pipeline", "experiment", "region", "TP", "FP", "FN")
+  results_by_region$PRECISION = results_by_region$TP / (results_by_region$FP + results_by_region$TP)
+  results_by_region$RECALL = results_by_region$TP / (results_by_region$FN + results_by_region$TP)
+
   
   void_vector <- as.data.frame(t(sapply(unique(results_by_region$region), function(x) c("void", x, -1, -1, -1, -1, -1), USE.NAMES = F)))
   colnames(void_vector) <- c("pipeline", "region", "TP", "FP", "FN", "RECALL", "PRECISION")
 
-  structural_variants <- results_by_region #rbind(results_by_region, void_vector)
+  structural_variants <- rbind(results_by_region, void_vector)
 
   structural_variants$pipeline <- factor(structural_variants$pipeline, levels = c("genotube_theoretical", "genotube", "void", "tbprofiler_theoretical", "TBprofiler"), ordered = T)
   structural_variants <- na.omit(structural_variants[(structural_variants$pipeline == "genotube" | structural_variants$pipeline == "TBprofiler") & structural_variants$region != "TOTAL" & structural_variants$region != "ANTIBIOTIC_GENE", ])

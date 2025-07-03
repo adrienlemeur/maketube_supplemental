@@ -27,7 +27,10 @@
                                 ) %>% na.omit()
   colnames(maketube_results) <- c("pipeline", "filter", "variant_caller", "experience", "region", "region2", "variant_class", "TP", "FP", "FN", "RECALL", "PRECISION", "F1")
 
+  # missing values for a handful of samples because of a bug in maketube. Fixed, does not affect the performance metrics for other strains.
   maketube_results <- subset(maketube_results, RECALL > 0 & PRECISION > 0 & pipeline != "nucmer")
+
+  # reformat and conquer for visualisation
   maketube_results$filter_caller <- paste(maketube_results$variant_caller, maketube_results$filter, sep = "_")
 
   maketube_results$pipeline <- factor(maketube_results$pipeline, levels = c("snpmutator", "maketube"), ordered = T)
@@ -41,6 +44,7 @@
   maketube_results$filter_caller <- factor(maketube_results$filter_caller, levels = filter_caller_order, ordered = T)
 } #import csv
 
+# result with duplication
 maketube_results_dupli <- subset(maketube_results, variant_class == "snp" & experience == "dupli")  
 
 PRECISION_dupli <- ggplot(maketube_results_dupli, aes(filter_caller, PRECISION, fill = filter_caller)) +
@@ -143,6 +147,9 @@ svg("fig5_precision_recall_3VC_only_violin_wo_dupli.svg", width = 10, height = 7
 PRECISION_WO_DUPLI / RECALL_WO_DUPLI
 dev.off()
 
+
+# statistical analysis using the methodology described in the paper
+# change the variable my_filter_caller and my_pipeline to test the intersection of these groups against each other
 my_filter_caller <- as.character(unique(maketube_results_dupli$filter_caller))
 my_pipeline <- "maketube"
 

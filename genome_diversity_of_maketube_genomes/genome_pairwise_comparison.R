@@ -13,21 +13,29 @@ lineages_color <- c(L1 = "darkorchid1", L2 = "dodgerblue2", L3 = "blueviolet",L4
 dnadiff_data <- read.table("distance_to_reference.tsv", header = T, sep = "\t")
 colnames(dnadiff_data) <- c("reference", "reference_lineage", "reference_source", "sample", "sample_lineage", "sample_source", "ref_length", "ref_aligned", "sample_length", "sample_aligned")
 
+
+# is the reference sequence from the same lineage as the sample considered ?
 dnadiff_data$relationship <- dnadiff_data$sample_lineage == dnadiff_data$reference_lineage
 dnadiff_data$relationship[dnadiff_data$relationship == TRUE] <- "intralineage"
 dnadiff_data$relationship[dnadiff_data$relationship == FALSE] <- "interlineage"
 
+# is the sample considered natural, created by snpmutator or created by maketube
 dnadiff_data$sample_source <- factor(dnadiff_data$sample_source, levels = c("natural", "snpmutator", "maketube"), ordered = T)
 dnadiff_data$lineage_source <- paste(dnadiff_data$sample_lineage, dnadiff_data$sample_source, sep = ", ")
 
+# The sequence we used for snpmutator contained NA, resulting in unaligned bits.
+# The % aligned on the reference was still 100% so we removed them for clarity.
 sub1 <- subset(dnadiff_data, !(sample_source == "snpmutator" & sample_lineage == "L2"))
 
 subset_dnadiff <- subset(sub1,
-                          (reference == "H37Rv" & sample_source == "natural") |
+                          (reference == "H37Rv" & sample_source == "natural") | # only distance to H37Rv if artificial genome
 #                          (reference_lineage == sample_lineage & sample_source == "natural") |
-                          (sample_source != "natural" & reference_lineage == sample_lineage)
+                          (sample_source != "natural" & reference_lineage == sample_lineage) # only intralineage distance for natural genome
                         )
 
+
+
+#visualisation
 fig3_A <- ggplot(data = subset_dnadiff) +
   geom_hline(yintercept = 0.001,
              linetype = "dotted", color = "red", ) +
@@ -74,13 +82,3 @@ ggplot(subset(subset_dnadiff, relationship == "intralineage")) +
         legend.text = element_text(size = 12), legend.title = element_text(size = 14, face = "bold"))
 dev.off()
 subset(dnadiff_data)
-
-natural_strains <- subset_dnadiff[subset_dnadiff$sample_source == "maketube",]
-100*summary((1- natural_strains$sample_aligned / natural_strains$sample_length) + (1- natural_strains$ref_aligned / natural_strains$ref_length)/2)
-100*summary(1- natural_strains$sample_aligned / natural_strains$sample_length)
-100*summary(1- natural_strains$ref_aligned / natural_strains$ref_length)
-  #intralineage_maketube <- subset(subset_dnadiff, relationship == "intralineage" & sample_source == "maketube")
-#summary(((1-intralineage_maketube$ref_aligned/intralineage_maketube$ref_length) + (1-intralineage_maketube$sample_aligned/intralineage_maketube$sample_length))/2)
-
-
-
