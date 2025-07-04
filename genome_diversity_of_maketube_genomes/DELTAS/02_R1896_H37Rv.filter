@@ -1,4 +1,4 @@
-/media/alemeur/HARVEST/benchmarking_tuberculosis/multiple_source_genome_for_maketube/REF/H37Rv.fasta /media/alemeur/HARVEST/benchmarking_tuberculosis/multiple_source_genome_for_maketube/REAL_STRAINS/02_R1896.fasta
+/home/alemeur/Documents/GitHub/maketube_supplemental/genome_diversity_of_maketube_genomes/REF/H37Rv.fasta /home/alemeur/Documents/GitHub/maketube_supplemental/genome_diversity_of_maketube_genomes/REAL_STRAINS/02_R1896.fasta
 NUCMER
 >H37Rv 02_R1896 4411532 4407304
 1 80482 1 80517 114 114 0

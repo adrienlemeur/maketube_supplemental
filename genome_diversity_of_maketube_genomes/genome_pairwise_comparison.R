@@ -6,6 +6,8 @@
   library(scales)
   library(ggrepel)
   library(ggforce)
+  library(concaveman)
+  library(ggforce)
 }
 
 lineages_color <- c(L1 = "darkorchid1", L2 = "dodgerblue2", L3 = "blueviolet",L4 = "firebrick2",L5 =  "darkorange4" ,L6 = "darkgreen",L7 = "gold1", bovis = "black")
@@ -36,27 +38,39 @@ subset_dnadiff <- subset(sub1,
 
 
 #visualisation
+
+subset_dnadiff$sample_lineage <- as.factor(subset_dnadiff$sample_lineage)
+subset_dnadiff$sample_source <- as.factor(subset_dnadiff$sample_source)
+
+subset_dnadiff$x <- as.numeric(1-subset_dnadiff$ref_aligned/subset_dnadiff$ref_length)
+subset_dnadiff$y <- as.numeric(1-subset_dnadiff$sample_aligned/subset_dnadiff$sample_length)
+
+as.numeric(1-sample_aligned/sample_length)
+levels(subset_dnadiff$sample_source)
+
+##fig3_A <- 
+
 fig3_A <- ggplot(data = subset_dnadiff) +
-  geom_hline(yintercept = 0.001,
-             linetype = "dotted", color = "red", ) +
   geom_hline(yintercept = seq(0, 0.013, by = 0.001),
              linetype = "dotted", color = "grey", ) +
   geom_vline(
     xintercept = seq(0, 0.013, by = 0.001),
     linetype = "dotted", color = "grey", ) +
   geom_point(aes(x = as.numeric(1-ref_aligned/ref_length), y = as.numeric(1-sample_aligned/sample_length), fill = sample_lineage, pch = sample_source), size = 2) +
-  geom_mark_hull(aes(x = 1-ref_aligned/ref_length, y = 1-sample_aligned/sample_length, col = sample_source, label = sample_source),
+  geom_mark_hull(data = subset_dnadiff, aes(x = x,
+                                            y = y,
+                                            col = sample_source, label = sample_source),
                  label.hjust = 0, fill = "grey",
                  con.type = "elbow", concavity = 10, expand = 0.03, radius = 0.03,
-                 label.fontface = "bold", label.fontsize = 13,
-                 con.colour = "inherit", label.fill = NA
+                 label.fontface = "bold", label.fontsize = 13
+                 # con.colour = "inherit", label.fill = NA
   ) +
   scale_shape_manual(values = c(natural = 21, snpmutator = 24, maketube = 25), name = "Genome category :") +
   scale_fill_manual(values = lineages_color, name = "Strain lineage") +
   scale_color_manual(values = c("maketube" = "firebrick", "snpmutator" = "orange", "natural" = "darkgreen"), guide = "none") +
   guides(fill = guide_legend(override.aes = list(pch = 21)), 
          pch = guide_legend(order = 1)) +
-  xlim(c(-0.001, 0.013)) + ylim(c(-0.001, 0.013)) +
+  xlim(c(0, 0.015)) + ylim(c(0, 0.015)) +
   ylab("Distance to the reference") +
   xlab("Distance to the sample") +
   theme_light() +
@@ -81,4 +95,3 @@ ggplot(subset(subset_dnadiff, relationship == "intralineage")) +
         axis.text.x = element_text(size = 14, hjust = 0.5),
         legend.text = element_text(size = 12), legend.title = element_text(size = 14, face = "bold"))
 dev.off()
-subset(dnadiff_data)

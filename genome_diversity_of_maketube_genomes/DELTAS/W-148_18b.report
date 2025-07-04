@@ -1,4 +1,4 @@
-/media/alemeur/HARVEST/benchmarking_tuberculosis/multiple_source_genome_for_maketube/REAL_STRAINS/18b.fasta /media/alemeur/HARVEST/benchmarking_tuberculosis/multiple_source_genome_for_maketube/REAL_STRAINS/W-148.fasta
+/home/alemeur/Documents/GitHub/maketube_supplemental/genome_diversity_of_maketube_genomes/REAL_STRAINS/18b.fasta /home/alemeur/Documents/GitHub/maketube_supplemental/genome_diversity_of_maketube_genomes/REAL_STRAINS/W-148.fasta
 NUCMER
 
                                [REF]                [QRY]
@@ -39,49 +39,49 @@ TandemInsAvg                  102.12               110.38
 
 [SNPs]
 TotalSNPs                        473                  473
-TG                         28(5.92%)            27(5.71%)
-TC                        73(15.43%)           71(15.01%)
 TA                          3(0.63%)             6(1.27%)
+TC                        73(15.43%)           71(15.01%)
+TG                         28(5.92%)            27(5.71%)
 AG                        75(15.86%)           81(17.12%)
 AC                         24(5.07%)            26(5.50%)
 AT                          6(1.27%)             3(0.63%)
-CG                         35(7.40%)            24(5.07%)
 CT                        71(15.01%)           73(15.43%)
 CA                         26(5.50%)            24(5.07%)
+CG                         35(7.40%)            24(5.07%)
 GC                         24(5.07%)            35(7.40%)
-GT                         27(5.71%)            28(5.92%)
 GA                        81(17.12%)           75(15.86%)
+GT                         27(5.71%)            28(5.92%)
 
 TotalGSNPs                       394                  394
-GT                         22(5.58%)            25(6.35%)
-GA                        67(17.01%)           67(17.01%)
-GC                         15(3.81%)            25(6.35%)
+TA                          2(0.51%)             2(0.51%)
+TC                        59(14.97%)           69(17.51%)
+TG                         25(6.35%)            22(5.58%)
 CT                        69(17.51%)           59(14.97%)
 CA                         21(5.33%)            20(5.08%)
 CG                         25(6.35%)            15(3.81%)
-TG                         25(6.35%)            22(5.58%)
-TA                          2(0.51%)             2(0.51%)
-TC                        59(14.97%)           69(17.51%)
+GT                         22(5.58%)            25(6.35%)
+GC                         15(3.81%)            25(6.35%)
+GA                        67(17.01%)           67(17.01%)
+AG                        67(17.01%)           67(17.01%)
 AC                         20(5.08%)            21(5.33%)
 AT                          2(0.51%)             2(0.51%)
-AG                        67(17.01%)           67(17.01%)
 
 TotalIndels                      419                  419
 T.                         27(6.44%)            39(9.31%)
 A.                         40(9.55%)            28(6.68%)
 C.                        68(16.23%)           66(15.75%)
 G.                        80(19.09%)           71(16.95%)
-.G                        71(16.95%)           80(19.09%)
 .T                         39(9.31%)            27(6.44%)
 .C                        66(15.75%)           68(16.23%)
+.G                        71(16.95%)           80(19.09%)
 .A                         28(6.68%)            40(9.55%)
 
 TotalGIndels                      23                   23
-G.                         3(13.04%)            8(34.78%)
-C.                         3(13.04%)            3(13.04%)
 T.                          1(4.35%)             1(4.35%)
+C.                         3(13.04%)            3(13.04%)
+G.                         3(13.04%)            8(34.78%)
 A.                         3(13.04%)             1(4.35%)
-.A                          1(4.35%)            3(13.04%)
 .T                          1(4.35%)             1(4.35%)
-.C                         3(13.04%)            3(13.04%)
+.A                          1(4.35%)            3(13.04%)
 .G                         8(34.78%)            3(13.04%)
+.C                         3(13.04%)            3(13.04%)

@@ -21,7 +21,7 @@ This is the repository for the maketube article (link).
 
 #### R libs :
 	* seqinr, jackalope, optparse, Biostrings, dplyr, ape (maketube)
-	* ggplot2, scales, ggrepel, ggforce
+	* ggplot2, scales, ggrepel, ggforce (INSTALL WITH DEVTOOLS v0.5)
 
 ### Descriptions :
 

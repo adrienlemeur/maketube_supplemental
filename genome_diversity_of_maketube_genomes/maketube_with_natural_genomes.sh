@@ -31,7 +31,7 @@ if [ "$1" == "-r" ]; then
 			--slope "50,100,150,200,250,300"
 
 		snpmutator "$reference_file" \
-			--num-simulations 15 \
+			--num-simulations 30 \
 			--num-substitutions 800 \
 			--num-insertions 50 \
 			--num-deletions 50 \
