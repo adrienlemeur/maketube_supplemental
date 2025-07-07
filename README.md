@@ -51,6 +51,43 @@ The visualisation is made from `distance_to_reference.tsv` with `genome_pairwise
 ├────────── maketube.R
 └────── natural_strains_info.txt			#ID, lineage and additional information about natural strains
 ```
+
+---
+## <a name="nucmer_minimap2"></a> Evaluating the performance of nucmer & minimap2
+### Dependencies :
+
+#### Tools : 
+	- all2vcf (v0.7.8, installed manually), nucmer (v3.1, installed manually), minimap2 (v2.28-r1209, compiled manually), bcftools (v1.19, htslib : v1.19, installed manually)
+
+#### R libs :
+	- ggplot2, gridExtra, scales, patchwork, gghalves, ggpp, ggpubr, flipr
+#### Python libs :
+	* cyvcf2 (vcf2metrics.py)
+
+#### Descriptions :
+
+<p align="justify">
+	Artificial genomes [previously generated](#genome_diversity_tag) were also used to evaluate the performance of nucmer and minimap2.
+	First the genomes are aligned unto H37Rv using minimap2 and nucmer. Variants were called from minimap2 paf with paftools into `PAF_VCF`. 
+	nucmer variants were called using show-snps and converted into VCF in `PSEUDOVCF` with all2vcf (`6_minimap_nucmer_variants.sh`).
+	Variants called were compared to reference VCF in `maketube_strains` and `HEUPINK_STRAINS` using vcf2metrics.py. 
+</p>
+
+```
+nucmer_vs_minimap2/
+├── DELTAS						# nucmer deltas alignment files & other nucmer files
+├── HEUPINK_STRAINS					# snpmutator genomes (fasta, reference VCF)
+├── maketube_strains					# maketube genomes (fasta, backtrack, annotations and reference VCF)
+├── PAF							# PAF alignments
+├── PAF_VCF						# PAFtools.js produced VCF from script 6
+├── PSEUDOVCF						# nucmer derived VCF using all2vcf
+├── 6_minimap_nucmer_variants.sh			# from fasta sequence to alignment to VCF format
+├── 7_COMPARING_3_VARIANT_CALLERS.sh			# compute the performance metrics from the VCF computed in script 6
+├── a_database_to_rule_them_all.tsv			# information about the strains (source, artificial or natural, maketube or snpmutator, etc.)
+├── nucmer_minimap2_results.tsv				# piped results from script 7
+└── NUCMER_PAF.R					# visualisation & statistical analysis
+```
+
 ---
 ## <a name="three_vc"></a> Evaluation of TBprofiler, MTBseq & genotube
 ### Dependencies :
@@ -94,43 +131,6 @@ Variants are then compared to the reference variants using `vcf2metrics.py` in s
    ├── maketube_strains							# maketube fasta
    ├── three_variant_caller_results.tsv					# piped output from 1_COMPARING_3_VARIANT_CALLERS.sh
    └── THREE_VC.R							# visualisation
-```
-
-
----
-## <a name="nucmer_minimap2"></a> Evaluating the performance of nucmer & minimap2
-### Dependencies :
-
-#### Tools : 
-	- all2vcf (v0.7.8, installed manually), nucmer (v3.1, installed manually), minimap2 (v2.28-r1209, compiled manually), bcftools (v1.19, htslib : v1.19, installed manually)
-
-#### R libs :
-	- ggplot2, gridExtra, scales, patchwork, gghalves, ggpp, ggpubr, flipr
-#### Python libs :
-	* cyvcf2 (vcf2metrics.py)
-
-#### Descriptions :
-
-<p align="justify">
-	Artificial genomes [used for comparing genotube, TBprofiler and MTBseq](#three_vc) were also used to evaluate the performance of nucmer and minimap2.
-	First the genomes are aligned unto H37Rv using minimap2 and nucmer. Variants were called from minimap2 paf with paftools into `PAF_VCF`. 
-	nucmer variants were called using show-snps and converted into VCF in `PSEUDOVCF` with all2vcf (`6_minimap_nucmer_variants.sh`).
-	Variants called were compared to reference VCF in `maketube_strains` and `HEUPINK_STRAINS` using vcf2metrics.py. 
-</p>
-
-```
-nucmer_vs_minimap2/
-├── DELTAS						# nucmer deltas alignment files & other nucmer files
-├── HEUPINK_STRAINS					# snpmutator genomes (fasta, reference VCF)
-├── maketube_strains					# maketube genomes (fasta, backtrack, annotations and reference VCF)
-├── PAF							# PAF alignments
-├── PAF_VCF						# PAFtools.js produced VCF from script 6
-├── PSEUDOVCF						# nucmer derived VCF using all2vcf
-├── 6_minimap_nucmer_variants.sh			# from fasta sequence to alignment to VCF format
-├── 7_COMPARING_3_VARIANT_CALLERS.sh			# compute the performance metrics from the VCF computed in script 6
-├── a_database_to_rule_them_all.tsv			# information about the strains (source, artificial or natural, maketube or snpmutator, etc.)
-├── nucmer_minimap2_results.tsv				# piped results from script 7
-└── NUCMER_PAF.R					# visualisation & statistical analysis
 ```
 
 
