@@ -57,8 +57,6 @@ do
 		bcftools norm -a -m- ~/SCRATCH/tmp.vcf.gz -Oz > "PSEUDOVCF/$sample.vcf.gz"
 	fi
 
-
-
 done < <(grep -v 'strain' "maketube_run/H37Rv_run/my_run_arborescence.tsv")
 
 exit

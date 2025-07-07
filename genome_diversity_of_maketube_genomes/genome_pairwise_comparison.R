@@ -31,7 +31,6 @@ sub1 <- subset(dnadiff_data, !(sample_source == "snpmutator" & sample_lineage ==
 
 subset_dnadiff <- subset(sub1,
                           (reference == "H37Rv" & sample_source == "natural") | # only distance to H37Rv if artificial genome
-#                          (reference_lineage == sample_lineage & sample_source == "natural") |
                           (sample_source != "natural" & reference_lineage == sample_lineage) # only intralineage distance for natural genome
                         )
 
@@ -44,9 +43,6 @@ subset_dnadiff$sample_source <- as.factor(subset_dnadiff$sample_source)
 
 subset_dnadiff$x <- as.numeric(1-subset_dnadiff$ref_aligned/subset_dnadiff$ref_length)
 subset_dnadiff$y <- as.numeric(1-subset_dnadiff$sample_aligned/subset_dnadiff$sample_length)
-
-as.numeric(1-sample_aligned/sample_length)
-levels(subset_dnadiff$sample_source)
 
 ##fig3_A <- 
 
