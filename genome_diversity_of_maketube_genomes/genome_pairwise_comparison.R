@@ -30,11 +30,14 @@ dnadiff_data$lineage_source <- paste(dnadiff_data$sample_lineage, dnadiff_data$s
 sub1 <- subset(dnadiff_data, !(sample_source == "snpmutator" & sample_lineage == "L2"))
 
 subset_dnadiff <- subset(sub1,
-                          (reference == "H37Rv" & sample_source == "natural") | # only distance to H37Rv if artificial genome
-                          (sample_source != "natural" & reference_lineage == sample_lineage) # only intralineage distance for natural genome
+                          (reference_lineage == sample_lineage & sample_source == "natural") | # only distance to H37Rv if artificial genome
+                         (sample_source != "natural" & reference_lineage == sample_lineage) # only intralineage distance for natural genome
                         )
 
-
+#subset_dnadiff <- subset(sub1,
+#                         (reference == "H37Rv" & sample_source == "natural") | # only distance to H37Rv if artificial genome
+#                         (sample_source != "natural" & reference == "H37Rv") # only intralineage distance for natural genome
+#)
 
 #visualisation
 
@@ -66,9 +69,8 @@ fig3_A <- ggplot(data = subset_dnadiff) +
   scale_color_manual(values = c("maketube" = "firebrick", "snpmutator" = "orange", "natural" = "darkgreen"), guide = "none") +
   guides(fill = guide_legend(override.aes = list(pch = 21)), 
          pch = guide_legend(order = 1)) +
-  xlim(c(0, 0.015)) + ylim(c(0, 0.015)) +
-  ylab("Distance to the reference") +
-  xlab("Distance to the sample") +
+  ylab("Sample to reference") +
+  xlab("Reference to sample") +
   theme_light() +
   theme(axis.title.y = element_text(size = 14, face = "bold", hjust = 0.5),
         axis.title.x = element_text(size = 14, face = "bold", hjust = 0.5),
@@ -84,7 +86,7 @@ ggplot(subset(subset_dnadiff, relationship == "intralineage")) +
   geom_vline(
               xintercept = seq(0, 0.013, by = 0.001),
               linetype = "dotted", color = "grey") +
-  geom_boxplot(aes(sample_source, ((1-ref_aligned/ref_length) + (1-sample_aligned/sample_length))/2, fill = sample_source)) +
+  geom_boxplot(aes(sample_source, ((1-ref_aligned/ref_length)), fill = sample_source)) +
   scale_fill_manual(values = c("maketube" = "firebrick", "snpmutator" = "orange", "natural" = "darkgreen"), guide = "none") +
   xlab("") + ylab("Average pairwise \ndistance to H37Rv") +
   theme(axis.title.y = element_text(size = 14, hjust = 0.5),

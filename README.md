@@ -105,11 +105,11 @@ nucmer_vs_minimap2/
 ### Descriptions :
 
 <p align="justify">
-Artificial genomes were created using maketube and snpmutator and respectively put in `maketube_strains` and `HEUPINK_STRAINS`.
-Their variants were called using TBprofiler (v6.6.3, installed via mamba), MTBseq (v1.1.0, installed via mamba) and genotube (v???, installed manually).
-VCF from TBprofiler were put in `TBprofiler`, VCF from MTBseq were put in `GATK_MTBseq` and VCF from genotube in `genotube`. 
-Raw calls, ie. unfiltered call from GATK and freebayes are respectively in `GATK_RAW_CALLS` and `FREEBAYES_RAW_CALLS`.
-Variants are then compared to the reference variants using `vcf2metrics.py` in script `1_COMPARING_3_VARIANTS_CALLERS.sh`.
+	Artificial genomes were created using maketube and snpmutator and respectively put in `maketube_strains` and `HEUPINK_STRAINS`.
+	Their variants were called using TBprofiler (v6.6.3, installed via mamba), MTBseq (v1.1.0, installed via mamba) and genotube (v???, installed manually).
+	VCF from TBprofiler were put in `TBprofiler`, VCF from MTBseq were put in `GATK_MTBseq` and VCF from genotube in `genotube`. 
+	Raw calls, ie. unfiltered call from GATK and freebayes are respectively in `GATK_RAW_CALLS` and `FREEBAYES_RAW_CALLS`.
+	Variants are then compared to the reference variants using `vcf2metrics.py` in script `1_COMPARING_3_VARIANTS_CALLERS.sh`.
 
 </p>
 
@@ -153,6 +153,7 @@ Variants are then compared to the reference variants using `vcf2metrics.py` in s
 	FASTQ are generated from the fasta and the reads are aligned on the reference genome by script 1.
 	Variant are called using freebayes by script 2.
 	Variant are compared to the test VCF using `vcf2metrics.py`. 10kbp regions composed of 1kbp windows are taken across the different regions.
+	vcf2metrics.py computes the precision and recall specificaly in these 10kbp regions windows.
 </p>
 
 ```
