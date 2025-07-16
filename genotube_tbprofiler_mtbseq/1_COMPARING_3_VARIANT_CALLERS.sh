@@ -1,120 +1,97 @@
 #!/usr/bin/env bash
 
-all_strains=$(find ./ -type f \( -iname \*.fasta -o -iname \*.fa \))
 REF="REF/H37Rv.fasta"
 
 mkdir -p ~/SCRATCH
 
 while read LINE
 do
+
 	sample=$(echo $LINE | cut -f1 -d ' ')
-	FASTA=$(echo $LINE | cut -f2 -d ' ')
-	
+	strain=$(echo $LINE | cut -f2 -d ' ')
+
+	fasta=$(echo $LINE | cut -f12 -d ' ')
 	source=$(echo $LINE | cut -f3 -d ' ')
-	reference=$(echo $LINE | cut -f4 -d ' ')
 
-	EQUIVALENCE=$(echo $LINE | cut -f5 -d ' ')
-	annotation=$(echo $LINE | cut -f6 -d ' ')
+	reference_vcf=$(echo $LINE | cut -f11 -d ' ')
 
-	RAW_FREEBAYES=$(echo $LINE | cut -f7 -d ' ')
-	GENOTUBE=$(echo $LINE | cut -f8 -d ' ')
+	maketube_equivalence=$(echo $LINE | cut -f4 -d ' ')
+	maketube_structural_variants=$(echo $LINE | cut -f5 -d ' ')
 
-	RAW_GATK=$(echo $LINE | cut -f9 -d ' ')
-	MTBseq=$(echo $LINE | cut -f10 -d ' ')
+	freebayes_raw=$(echo $LINE | cut -f6 -d ' ')
+	genotube=$(echo $LINE | cut -f7 -d ' ')
 
-	TBprofiler=$(echo -n $LINE | cut -f11 -d ' ')
+	samtools_raw=$(echo $LINE | cut -f8 -d ' ')
+	MTBseq=$(echo $LINE | cut -f9 -d ' ')
 
-	cat $annotation | grep "dupli" > ~/SCRATCH/dupli_region.bed
+	TBprofiler=$(echo -n $LINE | cut -f10 -d ' ')
+	
+	fasta_length=$(cat $fasta | tr -d '\n' | grep -Pi "A|T|C|G|N" | wc -c)
 
+	cat $maketube_structural_variants | grep "dupli" > ~/SCRATCH/dupli_region.bed
 
-	bcftools norm -a -m- $reference -Oz > ~/SCRATCH/reference.vcf.gz #2>> /dev/null
+	bcftools norm -a -m- $reference_vcf -Ob | bcftools view -v snps -s $strain | grep -v 'AC=0' | bcftools view -Oz > ~/SCRATCH/reference.vcf.gz #2>> /dev/null
 
-	bcftools norm -a -m- $RAW_FREEBAYES -Oz > ~/SCRATCH/raw_freebayes.vcf.gz #2>> /dev/null
+	bcftools norm -a -m- $samtools_raw -Oz > ~/SCRATCH/samtools_raw.vcf.gz #2>> /dev/null	
+	bcftools norm -a -m- $freebayes_raw -Oz > ~/SCRATCH/raw_freebayes.vcf.gz #2>> /dev/null
 
-
-	python3 vcf2metrics.py -i ~/SCRATCH/raw_freebayes.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --sample $sample --add_col $source "freebayes" "RAW" "dupli"
-
-	bcftools norm -a -m- $GENOTUBE -Oz > ~/SCRATCH/genotube_freebayes.vcf.gz #2>> /dev/null
-
-	python3 vcf2metrics.py -i ~/SCRATCH/genotube_freebayes.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --sample $sample --add_col $source "freebayes" "genotube" "dupli"
-
-
-	bcftools norm -a -m- $TBprofiler -Oz > ~/SCRATCH/tbprofiler.vcf.gz #2>> /dev/null
-	python3 vcf2metrics.py -i ~/SCRATCH/tbprofiler.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --sample $sample --add_col $source "freebayes" "TBprofiler" "dupli"
-
-
-	bcftools norm -a -m- $RAW_GATK -Oz > ~/SCRATCH/raw_gatk.vcf.gz #2>> /dev/null	
-	python3 vcf2metrics.py -i ~/SCRATCH/raw_gatk.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --sample $sample --add_col $source "mpileup" "RAW" "dupli"
-
+	bcftools norm -a -m- $genotube -Oz > ~/SCRATCH/genotube.vcf.gz #2>> /dev/null
 	bcftools norm -a -m- $MTBseq -Oz > ~/SCRATCH/mtbseq.vcf.gz #2>> /dev/null
-	python3 vcf2metrics.py -i ~/SCRATCH/mtbseq.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --sample $sample --add_col $source "mpileup" "MTBseq" "dupli"
+	bcftools norm -a -m- $TBprofiler -Oz > ~/SCRATCH/tbprofiler.vcf.gz #2>> /dev/null
 
-	cat $annotation | grep "duplicated" > ~/SCRATCH/dupli_region.bed
+	python3 vcf2metrics.py -i ~/SCRATCH/raw_freebayes.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --backtrack $maketube_equivalence --sample $sample --add_col $source "freebayes" "freebayes_raw" "dupli" | grep -P "\tsnp"
+	python3 vcf2metrics.py -i ~/SCRATCH/samtools_raw.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --backtrack $maketube_equivalence --sample $sample --add_col $source "samtools" "samtools_raw" "dupli" | grep -P "\tsnp"
 
-	#subtract
-	python3 vcf2metrics.py -i ~/SCRATCH/raw_freebayes.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --subtract ~/SCRATCH/dupli_region.bed --sample $sample --add_col $source "freebayes" "RAW" "wo_dupli"
+	python3 vcf2metrics.py -i ~/SCRATCH/genotube.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --backtrack $maketube_equivalence --sample $sample --add_col $source "freebayes" "genotube" "dupli" | grep -P "\tsnp"
+	python3 vcf2metrics.py -i ~/SCRATCH/mtbseq.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --backtrack $maketube_equivalence --sample $sample --add_col $source "samtools" "MTBseq" "dupli" | grep -P "\tsnp"
+	python3 vcf2metrics.py -i ~/SCRATCH/tbprofiler.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --backtrack $maketube_equivalence --sample $sample --add_col $source "freebayes" "TBprofiler" "dupli" | grep -P "\tsnp"
 
-	python3 vcf2metrics.py -i ~/SCRATCH/genotube_freebayes.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --sample $sample --subtract ~/SCRATCH/dupli_region.bed --add_col $source "freebayes" "genotube" "wo_dupli"
+	python3 vcf2metrics.py -i ~/SCRATCH/raw_freebayes.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --subtract ~/SCRATCH/dupli_region.bed --backtrack $maketube_equivalence --sample $sample --add_col $source "freebayes" "freebayes_raw" "wo_dupli" | grep -P "\tsnp"
+	python3 vcf2metrics.py -i ~/SCRATCH/samtools_raw.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --subtract ~/SCRATCH/dupli_region.bed --backtrack $maketube_equivalence --sample $sample --add_col $source "samtools" "samtools_raw" "wo_dupli" | grep -P "\tsnp"
 
-	python3 vcf2metrics.py -i ~/SCRATCH/tbprofiler.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --sample $sample --subtract ~/SCRATCH/dupli_region.bed --add_col $source "freebayes" "TBprofiler" "wo_dupli"
+	python3 vcf2metrics.py -i ~/SCRATCH/genotube.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --subtract ~/SCRATCH/dupli_region.bed --backtrack $maketube_equivalence --sample $sample --add_col $source "freebayes" "genotube" "wo_dupli" | grep -P "\tsnp"
+	python3 vcf2metrics.py -i ~/SCRATCH/mtbseq.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --subtract ~/SCRATCH/dupli_region.bed --backtrack $maketube_equivalence --sample $sample --add_col $source "samtools" "MTBseq" "wo_dupli" | grep -P "\tsnp"
+	python3 vcf2metrics.py -i ~/SCRATCH/tbprofiler.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --subtract ~/SCRATCH/dupli_region.bed --backtrack $maketube_equivalence --sample $sample --add_col $source "freebayes" "TBprofiler" "wo_dupli" | grep -P "\tsnp"
 
-	python3 vcf2metrics.py -i ~/SCRATCH/raw_gatk.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --sample $sample --subtract ~/SCRATCH/dupli_region.bed --add_col $source "mpileup" "RAW" "wo_dupli"
+done < <(grep -v '#' a_database_to_rule_them_all.tsv | grep "maketube")
 
-	python3 vcf2metrics.py -i ~/SCRATCH/mtbseq.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--backtrack $EQUIVALENCE --sample $sample --subtract ~/SCRATCH/dupli_region.bed --add_col $source "mpileup" "MTBseq" "wo_dupli"
-
-
-done < <(grep -v '#' a_database_to_rule_them_all.tsv | grep "maketube" | grep -e "H1\." -e "H10\.")
 
 while read LINE
 do
+
 	sample=$(echo $LINE | cut -f1 -d ' ')
-	FASTA=$(echo $LINE | cut -f2 -d ' ')
-	
+	strain=$(echo $LINE | cut -f2 -d ' ')
+
+	fasta=$(echo $LINE | cut -f12 -d ' ')
 	source=$(echo $LINE | cut -f3 -d ' ')
-	reference=$(echo $LINE | cut -f4 -d ' ')
 
-	EQUIVALENCE=$(echo $LINE | cut -f5 -d ' ')
-	annotation=$(echo $LINE | cut -f6 -d ' ')
+	reference_vcf=$(echo $LINE | cut -f11 -d ' ')
 
-	RAW_FREEBAYES=$(echo $LINE | cut -f7 -d ' ')
-	GENOTUBE=$(echo $LINE | cut -f8 -d ' ')
+	maketube_equivalence=$(echo $LINE | cut -f4 -d ' ')
+	maketube_structural_variants=$(echo $LINE | cut -f5 -d ' ')
 
-	RAW_GATK=$(echo $LINE | cut -f9 -d ' ')
-	MTBseq=$(echo $LINE | cut -f10 -d ' ')
+	freebayes_raw=$(echo $LINE | cut -f6 -d ' ')
+	genotube=$(echo $LINE | cut -f7 -d ' ')
 
-	TBprofiler=$(echo -n $LINE | cut -f11 -d ' ')
+	samtools_raw=$(echo $LINE | cut -f8 -d ' ')
+	MTBseq=$(echo $LINE | cut -f9 -d ' ')
 
-	bcftools norm -a -m- $reference -Oz -o ~/SCRATCH/reference.vcf.gz #2>> /dev/null
+	TBprofiler=$(echo -n $LINE | cut -f10 -d ' ')
 
-	bcftools norm -a -m- $RAW_FREEBAYES -Oz > ~/SCRATCH/raw_freebayes.vcf.gz #2>> /dev/null
-	python3 vcf2metrics.py -i ~/SCRATCH/raw_freebayes.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--sample $sample --add_col $source "freebayes" "RAW" "dupli"
+	bcftools norm -a -m- $reference_vcf -Oz > ~/SCRATCH/reference.vcf.gz #2>> /dev/null
 
-	bcftools norm -a -m- $GENOTUBE -Oz > ~/SCRATCH/genotube_freebayes.vcf.gz #2>> /dev/null
-	python3 vcf2metrics.py -i ~/SCRATCH/genotube_freebayes.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--sample $sample --add_col $source "freebayes" "genotube" "dupli"
+	bcftools norm -a -m- $samtools_raw -Oz > ~/SCRATCH/samtools_raw.vcf.gz #2>> /dev/null	
+	bcftools norm -a -m- $freebayes_raw -Oz > ~/SCRATCH/raw_freebayes.vcf.gz #2>> /dev/null
 
-	bcftools norm -a -m- $TBprofiler | bcftools view -v snps,mnps,indels -Oz > ~/SCRATCH/tbprofiler.vcf.gz #2>> /dev/null
-	python3 vcf2metrics.py -i ~/SCRATCH/tbprofiler.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--sample $sample --add_col $source "freebayes" "TBprofiler" "dupli"
-
-	bcftools norm -a -m- $RAW_GATK -Oz > ~/SCRATCH/raw_gatk.vcf.gz #2>> /dev/null	
-	python3 vcf2metrics.py -i ~/SCRATCH/raw_gatk.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--sample $sample --add_col $source "mpileup" "RAW" "dupli"
-
+	bcftools norm -a -m- $genotube -Oz > ~/SCRATCH/genotube.vcf.gz #2>> /dev/null
 	bcftools norm -a -m- $MTBseq -Oz > ~/SCRATCH/mtbseq.vcf.gz #2>> /dev/null
-	python3 vcf2metrics.py -i ~/SCRATCH/mtbseq.vcf.gz --reference ~/SCRATCH/reference.vcf.gz \
-		--sample $sample --add_col $source "mpileup" "MTBseq" "dupli"
+	bcftools norm -a -m- $TBprofiler -Oz > ~/SCRATCH/tbprofiler.vcf.gz #2>> /dev/null
 
-done < <(grep -v '#' a_database_to_rule_them_all.tsv | grep "snpmutator" | grep -e "H1\." -e "H10\.")
+	python3 vcf2metrics.py -i ~/SCRATCH/raw_freebayes.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --sample $sample --add_col $source "freebayes" "freebayes_raw" "dupli" | grep -P "\tsnp"
+	python3 vcf2metrics.py -i ~/SCRATCH/samtools_raw.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --sample $sample --add_col $source "samtools" "samtools_raw" "dupli" | grep -P "\tsnp"
+
+	python3 vcf2metrics.py -i ~/SCRATCH/genotube.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --sample $sample --add_col $source "freebayes" "genotube" "dupli" | grep -P "\tsnp"
+	python3 vcf2metrics.py -i ~/SCRATCH/mtbseq.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --sample $sample --add_col $source "samtools" "MTBseq" "dupli" | grep -P "\tsnp"
+	python3 vcf2metrics.py -i ~/SCRATCH/tbprofiler.vcf.gz --reference ~/SCRATCH/reference.vcf.gz --sample $sample --add_col $source "freebayes" "TBprofiler" "dupli" | grep -P "\tsnp"
+done < <(grep -v '#' a_database_to_rule_them_all.tsv | grep "snpmutator")
 

@@ -34,6 +34,14 @@ subset_dnadiff <- subset(sub1,
                          (sample_source != "natural" & reference_lineage == sample_lineage) # only intralineage distance for natural genome
                         )
 
+subset_dnadiff <- subset(sub1,
+  (reference_lineage == sample_lineage & sample_source == "natural") | # only distance to H37Rv if artificial genome
+  (sample_source != "natural" & reference_lineage == sample_lineage) | # only intralineage distance for natural genome
+  (sample_lineage == "L5" & reference_lineage == "bovis") |
+  (sample_lineage == "L1" & reference_lineage == "L4")
+)
+
+
 #subset_dnadiff <- subset(sub1,
 #                         (reference == "H37Rv" & sample_source == "natural") | # only distance to H37Rv if artificial genome
 #                         (sample_source != "natural" & reference == "H37Rv") # only intralineage distance for natural genome
@@ -82,11 +90,11 @@ fig3_A
 dev.off()
 
 svg("fig3_B_pairwise_nucleotide_distribution.svg")
-ggplot(subset(subset_dnadiff, relationship == "intralineage")) +
+ggplot(subset_dnadiff) +
   geom_vline(
               xintercept = seq(0, 0.013, by = 0.001),
               linetype = "dotted", color = "grey") +
-  geom_boxplot(aes(sample_source, ((1-ref_aligned/ref_length)), fill = sample_source)) +
+  geom_boxplot(aes(sample_source, ((1-ref_aligned/ref_length)+(1-sample_aligned/sample_length))/2, fill = sample_source)) +
   scale_fill_manual(values = c("maketube" = "firebrick", "snpmutator" = "orange", "natural" = "darkgreen"), guide = "none") +
   xlab("") + ylab("Average pairwise \ndistance to H37Rv") +
   theme(axis.title.y = element_text(size = 14, hjust = 0.5),

@@ -27,18 +27,15 @@
                                 ) %>% na.omit()
   colnames(maketube_results) <- c("pipeline", "filter", "variant_caller", "experience", "region", "region2", "variant_class", "TP", "FP", "FN", "RECALL", "PRECISION", "F1")
 
-  # missing values for a handful of samples because of a bug in maketube. Fixed, does not affect the performance metrics for other strains.
-  maketube_results <- subset(maketube_results, RECALL > 0 & PRECISION > 0 & pipeline != "nucmer")
-
   # reformat and conquer for visualisation
   maketube_results$filter_caller <- paste(maketube_results$variant_caller, maketube_results$filter, sep = "_")
 
   maketube_results$pipeline <- factor(maketube_results$pipeline, levels = c("snpmutator", "maketube"), ordered = T)
-  paste(maketube_results$filter, maketube_results$variant_caller, sep = "_")
-  
-  filter_callers_labels = c("RAW_mpileup" = "mpileup \n(RAW)", "MTBseq_mpileup" = "MTBseq", "TBprofiler_freebayes" = "TBprofiler", "RAW_freebayes" = "freebayes \n(RAW)", "genotube_freebayes" = "genotube")
-  filter_caller_order <- c("RAW_mpileup", "RAW_freebayes", "MTBseq_mpileup", "TBprofiler_freebayes", "genotube_freebayes")
-  filter_caller_colors <- c("cadetblue1", "deepskyblue2", "chartreuse1", "khaki", "hotpink2")
+
+  filter_callers_labels = c("freebayes_raw_freebayes" = "freebayes \n(raw)", "MTBseq_samtools" = "MTBseq", "TBprofiler_freebayes" = "TBprofiler", "genotube_freebayes" = "genotube", "samtools_raw_samtools" = "samtools \n(raw)")
+
+  filter_caller_order <- c("freebayes_raw_freebayes", "samtools_raw_samtools", "MTBseq_samtools", "TBprofiler_freebayes", "genotube_freebayes")
+  filter_caller_colors <- c("cadetblue1", "khaki", "deepskyblue2", "chartreuse1", "coral")
   names(filter_caller_colors) <- filter_caller_order
   
   maketube_results$filter_caller <- factor(maketube_results$filter_caller, levels = filter_caller_order, ordered = T)
@@ -58,7 +55,7 @@ PRECISION_dupli <- ggplot(maketube_results_dupli, aes(filter_caller, PRECISION, 
   theme_classic() + ylab("PRECISION") +
   scale_y_continuous(limits = c(0.5, 1), n.breaks = 10, breaks = c(5:10)/10,
                      expand = expansion(mult = c(0, 0.3))) +
-  scale_x_discrete(name="new axis name", labels=c("RAW_GATK" = "GATK \n(RAW)", "MTBseq_GATK" = "MTBseq", "TBprofiler_mpileup" = "TBprofiler", "RAW_freebayes" = "freebayes \n(RAW)", "genotube_freebayes" = "genotube")) +
+  scale_x_discrete(name="new axis name", labels=c("raw" = "GATK \n(RAW)", "MTBseq_GATK" = "MTBseq", "TBprofiler_mpileup" = "TBprofiler", "RAW_freebayes" = "freebayes \n(RAW)", "genotube_freebayes" = "genotube")) +
   theme(text = element_text(NA),
         strip.text = element_text(size = 10, face = "bold", hjust = 0.5),
         axis.title.y = element_text(size = 14, face = "bold", hjust = 0.5),
@@ -70,6 +67,7 @@ PRECISION_dupli <- ggplot(maketube_results_dupli, aes(filter_caller, PRECISION, 
         axis.ticks.x = element_blank(), axis.line.x = element_blank()
   ) +
   ylab("PRECISION")
+
 
 RECALL_dupli <- ggplot(maketube_results_dupli, aes(filter_caller, RECALL, fill = filter_caller)) +
   geom_abline(slope = 0, intercept = c(0.5, 0.6, 0.7, 0.8, 0.9, 1), linetype = "dotted", color = "grey") +
@@ -91,13 +89,12 @@ RECALL_dupli <- ggplot(maketube_results_dupli, aes(filter_caller, RECALL, fill =
   ) +
   ylab("RECALL") + scale_alpha(guide = 'none')
 
-snpmutator <- subset(maketube_results_dupli, pipeline == "snpmutator" & variant_caller == "genotube")$FN
 
 svg("fig5_precision_recall_3VC_only_violin.svg", width = 10, height = 7)
 PRECISION_dupli / RECALL_dupli
 dev.off()
 
-maketube_results_WO_DUPLI <- subset(maketube_results, variant_class == "snp" & experience == "wo_dupli")  
+maketube_results_WO_DUPLI <- subset(maketube_results, experience == "wo_dupli")  
 
 PRECISION_WO_DUPLI <- ggplot(maketube_results_WO_DUPLI, aes(filter_caller, PRECISION, fill = filter_caller)) +
   geom_abline(slope = 0, intercept = c(0.5, 0.6, 0.7, 0.8, 0.9, 1), linetype = "dotted", color = "grey") +
