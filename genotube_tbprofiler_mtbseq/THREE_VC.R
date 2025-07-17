@@ -7,18 +7,6 @@
   library(tidyr)
   library(flipr)
   library(patchwork)
-
-
-  all_strains_info <- read.table("all_strains_info.tsv", header = T, sep = "\t")
-  
-  source_order <- c('other_lineages', 'lineage4', 'snpmutator', 'maketube')
-  all_strains_info$source <- factor(all_strains_info$source, levels = source_order, ordered = T)
-
-  my_colors = c("dodgerblue", "chartreuse", "firebrick1", "chocolate1")
-  names(my_colors) <- levels(all_strains_info$source)
-  
-  my_PCH = c(1, 2, 4, 3)
-  names(my_PCH) <- levels(all_strains_info$source)
 } #start
 
 {
@@ -145,6 +133,7 @@ dev.off()
 
 #my_filter_caller <- as.character(unique(maketube_results_dupli$filter_caller))
 
+
 my_pipeline <- "maketube"
 
 mtbseq_precision <- subset(maketube_results_dupli, pipeline == my_pipeline & filter_caller == "MTBseq_samtools")$PRECISION
@@ -155,12 +144,7 @@ mtbseq_recall <- subset(maketube_results_dupli, pipeline == my_pipeline & filter
 tbprofiler_recall <- subset(maketube_results_dupli, pipeline == my_pipeline & filter_caller == "TBprofiler_freebayes")$RECALL
 genotube_recall <- subset(maketube_results_dupli, pipeline == my_pipeline & filter_caller == "genotube_freebayes")$RECALL
 
-a <- tbprofiler_precision
-b <- genotube_precision
-c <- mtbseq_precision
-boxplot(a, b, c)
+tmp <- subset(maketube_results_dupli, pipeline == my_pipeline & filter_caller == "TBprofiler_freebayes")
 
 two.wilcox.test <- wilcox.test(x = a, y = b, alternative = "two.sided"); two.wilcox.test
 two.perm.test <- two_sample_test(y = a, x = b, B = 10000, alternative = "two_tail", stats = list(stat_welch), type = "exact") ; two.perm.test$observed ; two.perm.test$pvalue
-
-

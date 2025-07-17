@@ -133,11 +133,9 @@ source = "maketube"
 caller="minimap2"
 colnames(SNP$FILTER)
 
-a <- subset(SNP, FILTER == "minimap2" & pipeline == "maketube")$PRECISION
-b <- subset(SNP, FILTER == "minimap2" & pipeline == "snpmutator")$PRECISION
+a <- subset(SNP, FILTER == "minimap2" & pipeline == "maketube")$RECALL
+b <- subset(SNP, FILTER == "minimap2" & pipeline == "snpmutator")$RECALL
 
 two.wilcox.test <- wilcox.test(x = a, y = b, alternative = "two.sided"); two.wilcox.test; two.wilcox.test$statistic
 two.perm.test <- two_sample_test(x = a, y = b, B = 100000, stats = list(stat_welch), type = "exact") ; two.perm.test$observed ; two.perm.test$pvalue
-
-
 
