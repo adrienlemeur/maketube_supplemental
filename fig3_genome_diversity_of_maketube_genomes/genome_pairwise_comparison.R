@@ -89,6 +89,13 @@ svg("fig3_A_pairwise_nucleotide_distance.svg", width = 10, height = 10)
 fig3_A
 dev.off()
 
+tmp <- subset(subset_dnadiff, sample_source == "maketube")
+summary( 1 - (tmp$ref_aligned / tmp$ref_length)    )*100
+summary( 1 - (tmp$sample_aligned / tmp$sample_length)    )*100
+
+summary((as.numeric(1-tmp$ref_aligned/tmp$ref_length) + as.numeric(1-tmp$sample_aligned/tmp$sample_length))/2)
+
+
 svg("fig3_B_pairwise_nucleotide_distribution.svg")
 ggplot(subset_dnadiff) +
   geom_vline(
