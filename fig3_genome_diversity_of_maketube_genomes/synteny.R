@@ -14,7 +14,7 @@
 
 {
   dnadiff_data <- read.table("distance_to_reference.tsv", header = T, sep = "\t")
-  colnames(dnadiff_data) <- c("reference", "reference_lineage", "reference_source", "sample", "sample_lineage", "sample_source")
+  colnames(dnadiff_data) <- c("reference", "reference_lineage", "reference_source", "sample", "sample_lineage", "sample_source", "ref_length", "ref_aligned", "sample_length", "sample_aligned")
 
   subset_dnadiff <- subset(dnadiff_data,
                            (reference_lineage == sample_lineage & sample_source == "natural") | # only distance to H37Rv if artificial genome
