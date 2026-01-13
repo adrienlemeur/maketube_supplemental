@@ -6,9 +6,22 @@ This is the repository for the maketube article (link).
 
 <!--ts-->
 -  [Figure 3 : Diversity of artificial and natural genomes](#genome_diversity_tag)
--  [Figure 5 : Comparing three variant caller](#three_vc)
 -  [Figure 4 : Nucmer and minimap2](#nucmer_minimap2)
+-  [Figure 5 : Comparing three variant caller](#three_vc)
 -  [Figure 6 : Impact of structural variants](#structural_variants)
+---
+## <a name="forewords"></a> Forewords
+
+This repository contains all the files and script used in the maketube genome article.
+Heavy files such as 30X FASTQ and bam from `fig6_local_impact_variant_calling` were omitted.
+They can be generated straight away using the included script.
+
+Due to the lack of seed system for maketube, re-doing a run will not produce the same exact genomes.
+The strains generated for the article are generated in [Figure 3](#genome_diversity_tag).
+The strains generated from H37Rv are then reused for [Figure 4](#nucmer_minimap2) and [Figure 5](#three_vc).
+A new set of strains, with different maketube parameters are generated in [Figure 6](#structural_variants).
+
+If you encounter an issue when trying to reproduce the analysis, or if you have a question, please do send me an email at alemeur at biophylo.com so I can look into it. 
 
 ---
 ## <a name="genome_diversity_tag"></a> Diversity of artificial and natural genomes
@@ -26,7 +39,8 @@ This is the repository for the maketube article (link).
 ### Descriptions :
 
 <p align="justify">
-	
+
+Artificial strains from maketube and snpmutator are first generated.
 Maketube and snpmutator are first launched to generate strains from the 3 reference genomes (`natural_strains_info.txt`).
 A subsample of 10 strains for each reference, was manually copied into the `artificial_strains` folder.
 These genomes, and natural genomes are aligned onto the three reference genomes using nucmer, and the resulting delta files are filtered. A report is generated with dnadiff.
@@ -36,20 +50,21 @@ The visualisation is made from `distance_to_reference.tsv` with `genome_pairwise
 
 ### File :
 ```
-├── genome_diversity_of_maketube_genomes		# source folder
-│   ├── REF
-│   ├── DELTAS						# nucmer intermediary files .delta, .snps, etc.
-│   ├── artificial_strains				# snpmutator and maketube genomes
-│   ├── REAL_STRAINS					# natural strains sequences (& IS6110 locations, unused)
-│   ├── maketube_run					# maketube files : sequence, evolution partitions, annotations files. 
-|   │   ├── AF2122
-│   │   ├── 18b
-│   │   └── H37Rv
-│   ├────── distance_to_reference.tsv			# bases aligned on the reference, reference aligned on the sample genome
-│   └────── maketube_with_natural_genomes.sh		# script with all the analysis
-├────────── genome_pairwise_comparison.R		# visualisation
-├────────── maketube.R
-└────── natural_strains_info.txt			#ID, lineage and additional information about natural strains
+└── genome_diversity_of_maketube_genomes		# source folder
+    ├── REF
+    ├── DELTAS						# nucmer intermediary files .delta, .snps, etc.
+    ├── artificial_strains				# snpmutator and maketube genomes
+    ├── REAL_STRAINS					# natural strains sequences (& IS6110 locations, unused)
+    ├── maketube_run					# maketube files : sequence, evolution partitions, annotations files. 
+    │   ├── AF2122
+    │   ├── 18b
+    │   └── H37Rv
+    ├────── distance_to_reference.tsv			# bases aligned on the reference, reference aligned on the sample genome
+    ├────── 1_creating_artificial_genomes.sh		# creating the artificial genomes
+    ├────── 2_pairwise_genetic_distance_samples_vs_reference.sh		# compare the distance of artificial and natural strains to the references
+    ├────── genome_pairwise_comparison.R		# visualisation
+    ├────── maketube.R
+    └── natural_strains_info.txt			#ID, lineage and additional information about natural strains
 ```
 
 ---
@@ -81,8 +96,8 @@ nucmer_vs_minimap2/
 ├── PAF							# PAF alignments
 ├── PAF_VCF						# PAFtools.js produced VCF from script 6
 ├── PSEUDOVCF						# nucmer derived VCF using all2vcf
-├── 6_minimap_nucmer_variants.sh			# from fasta sequence to alignment to VCF format
-├── 7_COMPARING_3_VARIANT_CALLERS.sh			# compute the performance metrics from the VCF computed in script 6
+├── 1_call_variants_nucmer_minimap2.sh			# call variants from the artificial sequences FASTA
+├── 2_compute_nucmer_minimap2_performance_metrics.sh			# compare the VCF created by script n°1 to the reference VCF
 ├── a_database_to_rule_them_all.tsv			# information about the strains (source, artificial or natural, maketube or snpmutator, etc.)
 ├── nucmer_minimap2_results.tsv				# piped results from script 7
 └── NUCMER_PAF.R					# visualisation & statistical analysis
@@ -116,21 +131,20 @@ nucmer_vs_minimap2/
 
 ```
 └─ genotube_tbprofiler_mtbseq
-   ├── 0_alignement_30X_run.sh				 		# create illumina FASTQ from fasta art
-   ├── 1_COMPARING_3_VARIANT_CALLERS.sh					# compare the variants called by the pipelines to the reference VCF
-   ├── a_database_to_rule_them_all.tsv					# information about strains
+   ├── 1_three_pipeline_variant_metrics.sh					# compare the variants called by the pipelines to the reference VCF
+   ├── a_database_to_rule_them_all.tsv					# strain information and file location
    ├── all_strains_info.tsv						# reduced strain information
    ├── fig5_precision_recall_3VC_only_violin.svg			# pipeline performances with duplication region
    ├── fig5_precision_recall_3VC_only_violin_wo_dupli.svg		# pipeline performances without duplication region
-   ├── FREEBAYES_RAW_CALLS						# freebayes raw call without filtering
+   ├── FREEBAYES_RAW_CALLS						# freebayes raw call
    ├── GATK_MTBseq							# MTBseq VCF
-   ├── GATK_RAW_CALLS							# GATK raw call without additional filtering
+   ├── GATK_RAW_CALLS							# GATK raw call
    ├── genotube								# genotube VCF
    ├── TBprofiler							# TBprofiler VCF
-   ├── HEUPINK_STRAINS							# snpmutator fasta
-   ├── maketube_strains							# maketube fasta
-   ├── three_variant_caller_results.tsv					# piped output from 1_COMPARING_3_VARIANT_CALLERS.sh
-   └── THREE_VC.R							# visualisation
+   ├── HEUPINK_STRAINS							# snpmutator genomes
+   ├── maketube_strains							# maketube genomes
+   ├── three_variant_caller_results.tsv					# piped output of script n°1. TSV with performance metrics & additional informations
+   └── THREE_VC.R							# script for three_variant_caller_results.tsv visualisation
 ```
 
 
@@ -159,18 +173,17 @@ nucmer_vs_minimap2/
 ```
 local_impact_variant_calling/
 ├── 0_running_maketube.sh					# creation of maketube genome
-├── 1_fastq_alignment_variant_calling.sh			# fastq creation and alignment
-├── 2_actually_calling_variants.sh				# actually variant calling
-├── 3_filtering_variants.sh					# compare the called variant to the true variants
-├── BAM								# bwa-mem2 alignment files
-├── FILTERED_VCF							# filtered vcf using the genotube methodology
+├── 1_fastq_alignment_variant_calling.sh			# fastq creation and alignment on H37Rv
+├── 2_actually_calling_variants.sh				# variant calling
+├── 3_filtering_variants.sh					# comparison of the called variant to the true variants
+├── BAM								# bwa-mem2 alignment files on H37Rv from script n°1
+├── FILTERED_VCF							# filtered vcf from script n°3
 ├── maketube.R
 ├── maketube_run							# maketube genomes (fasta, backtrack, annotations and reference VCF)
 ├── REF								# reference sequence and source annotation
 ├── results_by_regions_with_without_duplicated.every_at_10k.bed	# 
 ├── structural_variants_metrics.R				# visualisation using artificial precision and recall
 ├── structural_variants_metrics_vs_real_regions.R	# visualisation using the 10k region across the different regions
-├── VCF								# unfiltered
+├── VCF								# unfiltered VCF from script n°2
 └── vcf2metrics.py
 ```
-

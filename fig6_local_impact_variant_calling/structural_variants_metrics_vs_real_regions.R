@@ -18,6 +18,10 @@
 results_by_region <- read.table("results_by_regions_with_without_duplicated.every_at_10k.bed", sep = "\t", header = F)
 colnames(results_by_region) <- c("pipeline", "strain", "experience", "region", "region2", "variant_class", "TP", "FP", "FN", "RECALL", "PRECISION", "F1")
 
+sum(subset(results_by_region, region2 == "IS_scar_regions" & experience == "without_dupli")$TP)
+
+unique(results_by_region$region2)
+
 {
   results_by_region$pipeline <- factor(results_by_region$pipeline, levels = c("genotube", "TBprofiler"), ordered = T)
   results_by_region$pipeline <- factor(results_by_region$pipeline, levels = c("genotube", "TBprofiler"), ordered = T)
@@ -96,14 +100,17 @@ svg("fig6_precision_and_recall_region_10k.svg", width = 10, height = 7)
 PRECISION / RECALL
 dev.off()
 
+unique(results_by_region$region2)
+mean(subset(results_by_region, experience == "without_dupli" & region2 == "insertion_flanking_regions")$FP)
 
 precision_neutral_with_dupli <- subset(results_by_region, experience == "with_dupli" & region2 == "NEUTRAL")$PRECISION
 recall_neutral_with_dupli <- subset(results_by_region, experience == "with_dupli" & region2 == "NEUTRAL")$RECALL
 
-precision_neutral_without_dupli <- subset(results_by_region, experience == "without_dupli" & region2 == "duplication_region")$PRECISION
+precision_neutral_without_dupli <- subset(results_by_region, experience == "without_dupli" & region2 == "NEUTRAL")$PRECISION
 recall_neutral_without_dupli <- subset(results_by_region, experience == "without_dupli" & region2 == "NEUTRAL")$RECALL
 
 my_region = 'duplicated_region'
+
 test_precision_with_dupli <- subset(results_by_region, experience == "with_dupli" & region2 == my_region)$PRECISION
 test_recall_with_dupli <- subset(results_by_region, experience == "with_dupli" & region2 == my_region)$RECALL
 
@@ -113,7 +120,7 @@ test_recall_without_dupli <- subset(results_by_region, experience == "without_du
 #PRECISION WITH
 two.wilcox.test <- wilcox.test(y = precision_neutral_with_dupli, x = test_precision_with_dupli, alternative = "less"); two.wilcox.test
 two.perm.test <- two_sample_test(y = precision_neutral_with_dupli, x = test_precision_with_dupli, B = 10000, alternative = "left_tail", stats = list(stat_welch), type = "exact") ; two.perm.test$observed ; two.perm.test$pvalue
-
+?wilcox.test
 #RECALL WITH
 two.wilcox.test <- wilcox.test(y = recall_neutral_with_dupli, x = test_recall_with_dupli, alternative = "less"); two.wilcox.test
 two.perm.test <- two_sample_test(y = recall_neutral_with_dupli, x = test_recall_with_dupli, B = 10000, alternative = "left_tail", stats = list(stat_welch), type = "exact") ; two.perm.test$observed ; two.perm.test$pvalue

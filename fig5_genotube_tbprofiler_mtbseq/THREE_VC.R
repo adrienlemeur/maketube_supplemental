@@ -144,7 +144,8 @@ mtbseq_recall <- subset(maketube_results_dupli, pipeline == my_pipeline & filter
 tbprofiler_recall <- subset(maketube_results_dupli, pipeline == my_pipeline & filter_caller == "TBprofiler_freebayes")$RECALL
 genotube_recall <- subset(maketube_results_dupli, pipeline == my_pipeline & filter_caller == "genotube_freebayes")$RECALL
 
-tmp <- subset(maketube_results_dupli, pipeline == my_pipeline & filter_caller == "TBprofiler_freebayes")
+a <- genotube_recall
+b <- mtbseq_recall
 
 two.wilcox.test <- wilcox.test(x = a, y = b, alternative = "two.sided"); two.wilcox.test
 two.perm.test <- two_sample_test(y = a, x = b, B = 10000, alternative = "two_tail", stats = list(stat_welch), type = "exact") ; two.perm.test$observed ; two.perm.test$pvalue
