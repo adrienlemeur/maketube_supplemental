@@ -47,22 +47,38 @@ paf2synteny <- function(pattern_input, target_append = NULL, col1 = "violet", co
       margin = margin(0)
     )
   }
+
   if(!is.na(reference) & (radical(unique(PAF$qname)[1]) == radical(reference))){
     tmp <- col1
     col1 <- col2
     col2 <- tmp
   }
-
-  plot <- plot_synteny(PAF, q_chrom = unique(PAF$qname)[1], t_chrom = unique(PAF$tname)[1], rc = F, centre = T) +
-    ggtitle(label = my_subtitle) +
-    theme(plot.title = title_format,
-          axis.title.x = element_blank(),
-          axis.text.y = element_text(size = 12, face = "bold", hjust = 0.5),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.border = element_blank(),
-          panel.background = element_blank())
-    
+  if(PAF$qlen[1] < PAF$tlen[1]){
+    paf_swapped <- PAF
+    paf_swapped$qname  <- PAF$tname
+    paf_swapped$tname  <- PAF$qname
+    PAF <- paf_swapped
+    plot <- plot_synteny(PAF, q_chrom = unique(PAF$qname)[1], t_chrom = unique(PAF$tname)[1], rc = F, centre = T) +
+      ggtitle(label = my_subtitle) +
+      theme(plot.title = title_format,
+            axis.title.x = element_blank(),
+            axis.text.y = element_text(size = 12, face = "bold", hjust = 0.5),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.border = element_blank(),
+            panel.background = element_blank()) +
+      scale_y_discrete(labels = c(PAF$qname[1], PAF$tname[1]))
+  } else {
+    plot <- plot_synteny(PAF, q_chrom = unique(PAF$qname)[1], t_chrom = unique(PAF$tname)[1], rc = F, centre = T) +
+      ggtitle(label = my_subtitle) +
+      theme(plot.title = title_format,
+            axis.title.x = element_blank(),
+            axis.text.y = element_text(size = 12, face = "bold", hjust = 0.5),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.border = element_blank(),
+            panel.background = element_blank())
+  }
 
   plot_object <- ggplot_build(plot)
   plot_object$data[[2]][1, "fill"] <- col1
@@ -71,6 +87,8 @@ paf2synteny <- function(pattern_input, target_append = NULL, col1 = "violet", co
 
   return(plot_recolored)
 }
+#PAF.plot <- plot_synteny(PAF, q_chrom = unique(PAF$qname)[1], t_chrom = unique(PAF$tname)[1], rc = F, centre = T)
+#PAF.build <- ggplot_build(PAF.plot)
 
 {
   natA <- paf2synteny("CDC1551_L4_H37Rv", col1 = "darkgreen", col2 = "darkgreen", my_subtitle = "Natural genome /<br> reference")
@@ -87,6 +105,8 @@ paf2synteny <- function(pattern_input, target_append = NULL, col1 = "violet", co
 }
 
 big_plot <- (natA / natB / natC) | (snpmutatorA / snpmutatorB / snpmutatorC) | (maketubeA / maketubeB / maketubeC)
+ggsave(big_plot, device = "png", filename = "fig3_C_syntenyplot_exemples.png", width = 4000, height = 2000, units = "px")
+
 subset_dnadiff <- subset_dnadiff[order(subset_dnadiff$sample_source, subset_dnadiff$reference, decreasing = F),]
 
 gigantic_list_of_plots <- apply(subset_dnadiff, 1, function(x) {
@@ -101,13 +121,14 @@ gigantic_list_of_plots <- apply(subset_dnadiff, 1, function(x) {
 })
 
 ggsave(wrap_plots(gigantic_list_of_plots[c(1:25)], ncol = 5, nrow = 5), device = "pdf", filename = "A", width = 4000, height = 2000, units = "px")
+
 ggsave(wrap_plots(gigantic_list_of_plots[c(26:50)], ncol = 5, nrow = 5), device = "pdf", filename = "B", width = 4000, height = 2000, units = "px")
 ggsave(wrap_plots(gigantic_list_of_plots[c(51:75)], ncol = 5, nrow = 5), device = "pdf", filename = "C", width = 4000, height = 2000, units = "px")
 ggsave(wrap_plots(gigantic_list_of_plots[c(76:100)], ncol = 5, nrow = 5), device = "pdf", filename = "D", width = 4000, height = 2000, units = "px")
 ggsave(wrap_plots(gigantic_list_of_plots[c(101:125)], ncol = 5, nrow = 5), device = "pdf", filename = "E", width = 4000, height = 2000, units = "px")
 ggsave(wrap_plots(gigantic_list_of_plots[c(126:150)], ncol = 5, nrow = 5), device = "pdf", filename = "F", width = 4000, height = 2000, units = "px")
 ggsave(wrap_plots(gigantic_list_of_plots[c(151:170)], ncol = 5, nrow = 5), device = "pdf", filename = "G", width = 4000, height = 2000, units = "px")
-ggsave(wrap_plots(gigantic_list_of_plots[c(171:173)], ncol = 5, nrow = 5), device = "pdf", filename = "G", width = 4000, height = 2000, units = "px")
+ggsave(wrap_plots(gigantic_list_of_plots[c(171:173)], ncol = 5, nrow = 5), device = "pdf", filename = "H", width = 4000, height = 2000, units = "px")
 
 
 
