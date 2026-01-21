@@ -33,7 +33,7 @@ radical <- function(string) {unlist(strsplit(as.character(string), split = "-|_"
 paf2synteny <- function(pattern_input, target_append = NULL, col1 = "violet", col2 = "purple", my_subtitle = NA, reference = NA){
   PAF <- read_paf(list.files("PAF", pattern = pattern_input, full.names = T))
   if(!is.null(target_append)){
-    PAF$tname <- paste(unique(PAF$tname)[1], target_append, sep = "\n")
+    PAF$qname <- paste(unique(PAF$qname)[1], target_append, sep = "\n")
   }
   if(is.na(my_subtitle)){
     title_format <- element_blank()
@@ -48,16 +48,17 @@ paf2synteny <- function(pattern_input, target_append = NULL, col1 = "violet", co
     )
   }
 
-  if(!is.na(reference) & (radical(unique(PAF$qname)[1]) == radical(reference))){
+  if(!is.na(reference) & (radical(unique(PAF$tname)[1]) == radical(reference))){
     tmp <- col1
     col1 <- col2
     col2 <- tmp
   }
-  if(PAF$qlen[1] < PAF$tlen[1]){
+  if(PAF$tlen[1] >= PAF$qlen[1]){
     paf_swapped <- PAF
     paf_swapped$qname  <- PAF$tname
     paf_swapped$tname  <- PAF$qname
     PAF <- paf_swapped
+
     plot <- plot_synteny(PAF, q_chrom = unique(PAF$qname)[1], t_chrom = unique(PAF$tname)[1], rc = F, centre = T) +
       ggtitle(label = my_subtitle) +
       theme(plot.title = title_format,
@@ -68,6 +69,11 @@ paf2synteny <- function(pattern_input, target_append = NULL, col1 = "violet", co
             panel.border = element_blank(),
             panel.background = element_blank()) +
       scale_y_discrete(labels = c(PAF$qname[1], PAF$tname[1]))
+    plot_object <- ggplot_build(plot)
+    plot_object$data[[2]][1, "fill"] <- col1
+    plot_object$data[[2]][2, "fill"] <- col2
+    plot_recolored <- wrap_ggplot_grob(ggplot_gtable(plot_object))
+
   } else {
     plot <- plot_synteny(PAF, q_chrom = unique(PAF$qname)[1], t_chrom = unique(PAF$tname)[1], rc = F, centre = T) +
       ggtitle(label = my_subtitle) +
@@ -78,17 +84,19 @@ paf2synteny <- function(pattern_input, target_append = NULL, col1 = "violet", co
             panel.grid.minor = element_blank(),
             panel.border = element_blank(),
             panel.background = element_blank())
+    plot_object <- ggplot_build(plot)
+    plot_object$data[[2]][2, "fill"] <- col1
+    plot_object$data[[2]][1, "fill"] <- col2
+    plot_recolored <- wrap_ggplot_grob(ggplot_gtable(plot_object))
   }
-
-  plot_object <- ggplot_build(plot)
-  plot_object$data[[2]][1, "fill"] <- col1
-  plot_object$data[[2]][2, "fill"] <- col2
-  plot_recolored <- wrap_ggplot_grob(ggplot_gtable(plot_object))
 
   return(plot_recolored)
 }
 #PAF.plot <- plot_synteny(PAF, q_chrom = unique(PAF$qname)[1], t_chrom = unique(PAF$tname)[1], rc = F, centre = T)
 #PAF.build <- ggplot_build(PAF.plot)
+
+PAF <- read_paf(list.files("PAF", pattern = "H37Rv_mutated_9_L4_H37Rv", full.names = T))
+plot_synteny(PAF, q_chrom = unique(PAF$qname)[1], t_chrom = unique(PAF$tname)[1])
 
 {
   natA <- paf2synteny("CDC1551_L4_H37Rv", col1 = "darkgreen", col2 = "darkgreen", my_subtitle = "Natural genome /<br> reference")
@@ -97,14 +105,16 @@ paf2synteny <- function(pattern_input, target_append = NULL, col1 = "violet", co
   
   snpmutatorA <- paf2synteny("H37Rv_mutated_9_L4_H37Rv", "(snpmutator)", col1 = "darkgreen", col2 = "orange", my_subtitle = "snpmutator genome /<br> reference")
   snpmutatorB <- paf2synteny("18b_mutated_9_L2_18b", "(snpmutator)", col1 = "darkgreen", col2 = "orange")
-  snpmutatorC <- paf2synteny("AF2122-97_mutated_1_bovis_AF2122-97", "(snpmutator)", col1 = "darkgreen", col2 = "orange")
-  
+  snpmutatorC <- paf2synteny("AF2122-97_mutated_1_bovis_AF2122-97", "(snpmutator)", col1 = "orange", col2 = "darkgreen")
+
   maketubeA <- paf2synteny("SV2_pop1_H9_L4_H37Rv", "(maketube)", col1 = "darkgreen", col2 = "firebrick", my_subtitle = "maketube genome /<br> reference")
   maketubeB <- paf2synteny("SV1_pop1_H1_L2_18b", "(maketube)", col1 = "darkgreen", col2 = "firebrick")
   maketubeC <- paf2synteny("SV3_pop1_H10_bovis_AF2122", "(maketube)", col1 = "darkgreen", col2 = "firebrick")
 }
 
 big_plot <- (natA / natB / natC) | (snpmutatorA / snpmutatorB / snpmutatorC) | (maketubeA / maketubeB / maketubeC)
+big_plot
+
 ggsave(big_plot, device = "png", filename = "fig3_C_syntenyplot_exemples.png", width = 4000, height = 2000, units = "px")
 
 subset_dnadiff <- subset_dnadiff[order(subset_dnadiff$sample_source, subset_dnadiff$reference, decreasing = F),]
