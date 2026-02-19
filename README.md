@@ -1,6 +1,6 @@
 <h1 align="center"> Maketube supplemental </h1>
 
-This is the repository for the maketube article (link).
+This is the repository for the maketube article. You can find maketube [here](https://github.com/adrienlemeur/maketube).
 
 #### Table of contents
 
