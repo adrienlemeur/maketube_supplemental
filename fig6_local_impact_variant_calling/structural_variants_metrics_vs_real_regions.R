@@ -20,8 +20,6 @@ colnames(results_by_region) <- c("pipeline", "strain", "experience", "region", "
 
 sum(subset(results_by_region, region2 == "IS_scar_regions" & experience == "without_dupli")$TP)
 
-unique(results_by_region$region2)
-
 {
   results_by_region$pipeline <- factor(results_by_region$pipeline, levels = c("genotube", "TBprofiler"), ordered = T)
   results_by_region$pipeline <- factor(results_by_region$pipeline, levels = c("genotube", "TBprofiler"), ordered = T)
@@ -100,7 +98,12 @@ svg("fig6_precision_and_recall_region_10k.svg", width = 10, height = 7)
 PRECISION / RECALL
 dev.off()
 
-unique(results_by_region$region2)
+a <- mean(subset(results_by_region, experience == "with_dupli" & region2 == "NEUTRAL")$RECALL)
+b <- mean(subset(results_by_region, experience == "with_dupli" & region2 == "insertion_flanking_regions")$RECALL)
+c <- mean(subset(results_by_region, experience == "with_dupli" & region2 == "IS_flanking_regions")$RECALL)
+
+(c)*100
+
 mean(subset(results_by_region, experience == "without_dupli" & region2 == "insertion_flanking_regions")$FP)
 
 precision_neutral_with_dupli <- subset(results_by_region, experience == "with_dupli" & region2 == "NEUTRAL")$PRECISION
